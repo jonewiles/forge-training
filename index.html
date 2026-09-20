@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Forge — HYROX Build</title>
-<meta name="forge-version" content="2.2">
+<meta name="forge-version" content="2.3">
 <meta name="theme-color" content="#111111">
 <style>
 :root{--bg:#f5f4ef;--card:#fff;--ink:#121212;--muted:#6c6c68;--line:#deddd7;--soft:#ecebe5}
@@ -26,6 +26,7 @@ h1{font-size:34px;line-height:1.02;margin:7px 0 5px;letter-spacing:-1.2px}h2{mar
 .exhead{display:flex;justify-content:space-between;gap:8px;align-items:flex-start}.mini{border:0;background:var(--soft);border-radius:9px;padding:7px 9px;font-size:11px;font-weight:800}
 .suggest{font-size:12px;font-weight:750;margin-top:5px}.complete{font-size:12px;color:var(--muted);margin-top:7px}
 .modal{position:fixed;inset:0;background:rgba(0,0,0,.42);z-index:50;display:flex;align-items:flex-end;justify-content:center}.sheet{background:var(--bg);width:100%;max-width:760px;border-radius:22px 22px 0 0;padding:18px 16px calc(22px + env(safe-area-inset-bottom));max-height:80vh;overflow:auto}.choice{width:100%;text-align:left;border:1px solid var(--line);background:#fff;border-radius:12px;padding:13px;margin:6px 0;font-weight:750}
+.programhero{padding:20px}.programhero h2{font-size:27px;letter-spacing:-.6px}.timeline{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:14px}.phasebox{background:var(--soft);border-radius:11px;padding:10px 5px;text-align:center;font-size:10px;font-weight:800}.phasebox.active{background:#111;color:#fff}.programday{border-top:1px solid var(--line);padding:14px 0;cursor:pointer}.programday:first-child{border-top:0}.programday h3{margin:3px 0 5px}.programmeta{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}.programmeta span{background:var(--soft);border-radius:999px;padding:6px 8px;font-size:10px;font-weight:750}.road{position:relative;padding-left:21px;margin-top:12px}.road:before{content:"";position:absolute;left:6px;top:7px;bottom:7px;width:2px;background:var(--line)}.roaditem{position:relative;padding:0 0 18px 8px}.roaditem:before{content:"";position:absolute;left:-20px;top:5px;width:10px;height:10px;background:#111;border-radius:50%}.roaditem:last-child{padding-bottom:0}.programcontrols{display:grid;grid-template-columns:44px 1fr 44px;gap:8px;align-items:center}.programcontrols button{height:42px;border:0;border-radius:12px;background:var(--soft);font-size:20px}.programweek{text-align:center}.modegrid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:10px}.modegrid button{border:1px solid var(--line);background:#fff;border-radius:11px;padding:10px 4px;font-size:11px;font-weight:800}.modegrid button.active{background:#111;color:#fff}.note{background:var(--soft);border-radius:13px;padding:12px;margin-top:10px}
 </style>
 </head>
 <body>
@@ -42,7 +43,17 @@ h1{font-size:34px;line-height:1.02;margin:7px 0 5px;letter-spacing:-1.2px}h2{mar
 <div id="selectedCard"></div>
 </section>
 
-<section id="program" class="hidden"><div class="eyebrow">PROGRAM</div><h1>Pre-HYROX Build</h1><div class="sub">Browse any week and open any training day.</div><div class="card" id="programList"></div></section>
+<section id="program" class="hidden">
+<div class="eyebrow">PROGRAM</div><h1>Your training plan.</h1>
+<div id="programHero"></div>
+<div class="card">
+  <div class="programcontrols"><button onclick="shiftProgramWeek(-1)">‹</button><div class="programweek"><b id="programWeekTitle"></b><div class="small" id="programWeekSub"></div></div><button onclick="shiftProgramWeek(1)">›</button></div>
+</div>
+<div class="card"><div class="row"><b>Weekly schedule</b><span class="small">Tap a day to open</span></div><div id="programList"></div></div>
+<div class="card"><b>Training environment</b><div class="small">Changes exercise options, not the goal of the session.</div><div class="modegrid"><button id="modeFull" onclick="setMode('Full Gym')">FULL GYM</button><button id="modeHotel" onclick="setMode('Hotel Gym')">HOTEL GYM</button><button id="modeDB" onclick="setMode('Dumbbells')">DB ONLY</button></div></div>
+<div class="card"><b>Programming notes</b><div class="note" id="programNote"></div></div>
+<div class="card"><b>Block roadmap</b><div class="road"><div class="roaditem"><b>Pre-HYROX Build</b><div class="small">Sep 21 – Dec 20 · muscle, strength and aerobic durability</div></div><div class="roaditem"><b>HYROX Specific</b><div class="small">Starts Dec 21 · running under fatigue + race stations</div></div><div class="roaditem"><b>Race Prep</b><div class="small">Specific simulations, pacing and fatigue management</div></div><div class="roaditem"><b>San Diego Race Week</b><div class="small">May 13–16, 2027 · taper and race</div></div></div></div>
+</section>
 <section id="progress" class="hidden"><div class="eyebrow">PROGRESS</div><h1>Your build</h1><div class="card"><b>Logged volume</b><h2 id="volume">0 lb</h2><div class="small" id="sessions">0 sessions</div></div><div class="card"><b>Running</b><h2 id="mileage">0 mi</h2><div class="small">Logged distance on this device</div></div></section>
 <section id="history" class="hidden"><div class="eyebrow">HISTORY</div><h1>Training log</h1><div class="card" id="historyList"></div></section>
 
@@ -67,7 +78,7 @@ const plan={
 6:{name:'Long Easy Run',sub:'Aerobic development',run:'4–5 mi easy',ex:[]},
 0:{name:'Rest',sub:'Recovery',run:null,ex:[]}
 };
-let today=strip(new Date()), selected=new Date(today), weekOffset=0, activeDate=null;
+let today=strip(new Date()), selected=new Date(today), weekOffset=0, activeDate=null, programWeekOffset=0;
 function strip(d){return new Date(d.getFullYear(),d.getMonth(),d.getDate())}
 function iso(d){return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')}
 function monday(d){let x=strip(d),n=x.getDay();x.setDate(x.getDate()-(n===0?6:n-1));return x}
@@ -94,51 +105,25 @@ function renderSelected(){let p=plan[selected.getDay()], total=p.ex.reduce((a,e)
  document.getElementById('phase').textContent=(selected<HYROX?'PRE-HYROX':'HYROX')+' · WEEK '+weekOf(selected);
  document.getElementById('selectedCard').innerHTML=`<div class="card"><div class="eyebrow">${fmt(selected).toUpperCase()}</div><h2>${p.name}</h2><div class="sub">${p.sub}</div><div class="summary"><div class="metric"><b>${total||'—'}</b><span>working sets</span></div><div class="metric"><b>${p.run?'RUN':'—'}</b><span>${p.run||'no run'}</span></div><div class="metric"><b>${rir(selected)}</b><span>target RIR</span></div></div>${p.run&&held?'<div class="card notice"><b>Run hold is active</b><div class="small">The run stays visible for planning, but is not a prompt to resume.</div></div>':''}<button class="btn full" style="margin-top:14px" onclick="openWorkout('${iso(selected)}')">${iso(selected)>iso(today)?'VIEW / LOG WORKOUT':'OPEN WORKOUT'}</button></div>`;
 }
-function renderProgram(){let names=['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'], days=[1,2,3,4,5,6,0], out='';days.forEach((dow,i)=>{let p=plan[dow];out+=`<div class="exercise"><div class="eyebrow">${names[i]}</div><h3>${p.name}</h3><div class="small">${p.run||p.sub}</div></div>`});document.getElementById('programList').innerHTML=out}
-
-const subs={
-'Barbell Bench Press':['DB Bench Press','Machine Chest Press','Push-Up'],
-'Incline DB Press':['Incline Machine Press','Incline Push-Up','Floor Press'],
-'Seated DB Shoulder Press':['Machine Shoulder Press','Standing DB Press','Landmine Press'],
-'Cable / Machine Fly':['DB Fly','Push-Up','Band Fly'],
-'Pull-up / Lat Pulldown':['Band Pulldown','DB Pullover','Inverted Row'],
-'Chest-Supported Row':['Seated Cable Row','1-Arm DB Row','Machine Row'],
-'Single-Arm Cable Row':['1-Arm DB Row','Band Row','Machine Row'],
-'Back Squat':['Goblet Squat','DB Front Squat','Leg Press'],
-'Romanian Deadlift':['DB RDL','KB RDL','Hip Thrust'],
-'Bulgarian Split Squat':['Reverse Lunge','Walking Lunge','Step-Up'],
-'Leg Curl':['Slider Leg Curl','Stability-Ball Curl','DB Leg Curl'],
-'Leg Extension':['Spanish Squat','Sissy Squat','Goblet Cyclist Squat'],
-'Standing Calf Raise':['Single-Leg Calf Raise','DB Calf Raise'],
-'Incline Bench Press':['Incline DB Press','Machine Chest Press','Push-Up'],
-'Flat DB Press':['Push-Up','Machine Chest Press','Floor Press'],
-'Seated Cable Row':['1-Arm DB Row','Band Row','Chest-Supported DB Row'],
-'EZ-Bar Curl':['DB Curl','Band Curl','Cable Curl'],
-'Cable Curl':['DB Curl','Band Curl','Hammer Curl'],
-'Triceps Pressdown':['DB Skullcrusher','Band Pressdown','Close-Grip Push-Up'],
-'Rope Pressdown':['DB Skullcrusher','Band Pressdown','Close-Grip Push-Up'],
-'Lateral Raise':['DB Lateral Raise','Band Lateral Raise'],
-'Cable Lateral Raise':['DB Lateral Raise','Band Lateral Raise'],
-'Rear-Delt Fly':['DB Rear-Delt Fly','Band Pull-Apart']
-};
-let timerInt=null,timerLeft=0,subTarget=null;
-function suggested(ex,date){
- let h=history().filter(x=>x.date<iso(date)).sort((a,b)=>b.date.localeCompare(a.date));
- for(let w of h){let f=(w.sets||[]).filter(s=>s.exercise===ex&&s.weight&&s.reps);if(f.length){
-   let last=f[f.length-1], rr=repRange(date).split('–').map(Number), good=f.every(s=>s.reps>=rr[1] && (s.rir===null||s.rir>=1));
-   let inc=last.weight>=100?5:2.5; return good?`Suggested: ${(last.weight+inc).toFixed(last.weight+inc===Math.round(last.weight+inc)?0:1)} lb · earned small increase`:`Suggested: ${last.weight} lb · repeat and own the range`;
- }} return 'Suggested: choose a load that leaves '+rir(date)+' RIR';
+function programBase(){let d=monday(today);d.setDate(d.getDate()+programWeekOffset*7);return d}
+function blockInfo(d){if(d<HYROX)return {name:'PRE-HYROX BUILD',dates:'Sep 21 → Dec 20',goal:'Add muscle + build running durability'};return {name:'HYROX SPECIFIC',dates:'Dec 21 → Race Prep',goal:'Convert strength and aerobic fitness into race-specific performance'}}
+function programNote(d){let w=wave(d);if(w===1)return 'Build Week 1 · Accumulate quality hypertrophy volume. Start conservatively and leave 1–3 reps in reserve.';if(w===2)return 'Build Week 2 · Moderate loading. Beat last week where possible while maintaining clean reps and 1–3 RIR.';if(w===3)return 'Build Week 3 · Heavier emphasis. Push performance without grinding reps; preserve running quality.';return 'Deload Week · Reduce working sets about 40–50%, keep 3–4 RIR, and exit the week fresher than you entered.'}
+function shiftProgramWeek(n){programWeekOffset+=n;renderProgram()}
+function setMode(m){localStorage.forgeMode=m;renderProgram()}
+function mode(){return localStorage.forgeMode||'Full Gym'}
+function openProgramDay(i){let d=programBase();d.setDate(d.getDate()+i);openWorkout(iso(d))}
+function renderProgram(){
+ let base=programBase(), info=blockInfo(base), wn=weekOf(base), w=wave(base), end=new Date(base);end.setDate(end.getDate()+6);
+ document.getElementById('programHero').innerHTML=`<div class="card programhero"><div class="eyebrow">${info.name}</div><h2>${info.dates}</h2><div class="sub">Week ${wn} · ${w===4?'Deload':'Build '+w}</div><div class="note"><div class="eyebrow">GOAL</div><b>${info.goal}</b></div><div class="timeline"><div class="phasebox ${w===1?'active':''}">BUILD 1<br>10–12</div><div class="phasebox ${w===2?'active':''}">BUILD 2<br>8–10</div><div class="phasebox ${w===3?'active':''}">BUILD 3<br>6–8</div><div class="phasebox ${w===4?'active':''}">DELOAD<br>8–10</div></div></div>`;
+ document.getElementById('programWeekTitle').textContent=base.toLocaleDateString('en-US',{month:'short',day:'numeric'})+' – '+end.toLocaleDateString('en-US',{month:'short',day:'numeric'});
+ document.getElementById('programWeekSub').textContent='Week '+wn+' · '+(w===4?'Deload':'Build '+w);
+ let days=[1,2,3,4,5,6,0], names=['MON','TUE','WED','THU','FRI','SAT','SUN'],out='';
+ days.forEach((dow,i)=>{let p=plan[dow],sets=p.ex.reduce((a,e)=>a+setsFor(e[1],base),0);out+=`<div class="programday" onclick="openProgramDay(${i})"><div class="row"><div><div class="eyebrow">${names[i]}</div><h3>${p.name}</h3><div class="small">${p.sub}</div></div><b>›</b></div><div class="programmeta">${sets?`<span>${sets} SETS</span>`:''}${p.ex.length?`<span>${repRange(base)} REPS</span><span>${rir(base)} RIR</span>`:''}${p.run?`<span>${p.run}</span>`:''}</div></div>`});
+ document.getElementById('programList').innerHTML=out;
+ document.getElementById('programNote').textContent=programNote(base);
+ ['Full','Hotel','DB'].forEach(x=>document.getElementById('mode'+x)?.classList.remove('active'));
+ let id=mode()==='Full Gym'?'modeFull':mode()==='Hotel Gym'?'modeHotel':'modeDB';document.getElementById(id)?.classList.add('active');
 }
-function startTimer(sec=90){stopTimer(false);timerLeft=sec;document.getElementById('restTimer').classList.remove('hidden');tickTimer();timerInt=setInterval(()=>{timerLeft--;tickTimer();if(timerLeft<=0)stopTimer()},1000)}
-function tickTimer(){let m=Math.floor(timerLeft/60),s=timerLeft%60;document.getElementById('timerValue').textContent=m+':'+String(s).padStart(2,'0')}
-function addTimer(n){timerLeft+=n;tickTimer()}
-function stopTimer(hide=true){if(timerInt)clearInterval(timerInt);timerInt=null;if(hide)document.getElementById('restTimer').classList.add('hidden')}
-function toggleSet(btn){btn.classList.toggle('done');btn.textContent=btn.classList.contains('done')?'✓':'';if(btn.classList.contains('done'))startTimer(90);updateWorkoutProgress()}
-function updateWorkoutProgress(){let all=[...document.querySelectorAll('.check')],done=all.filter(x=>x.classList.contains('done')).length;let el=document.getElementById('workoutProgress');if(el){el.textContent=done+' / '+all.length+' sets complete';document.getElementById('workoutProgressBar').style.width=(all.length?done/all.length*100:0)+'%'}}
-function openSubs(ex){subTarget=ex;document.getElementById('subTitle').textContent='Replace '+ex;let choices=subs[ex]||['DB variation','Machine variation','Bodyweight variation'];document.getElementById('subChoices').innerHTML=choices.map(x=>`<button class="choice" onclick="chooseSub('${x.replace(/'/g,"\\'")}')">${x}</button>`).join('');document.getElementById('subModal').classList.remove('hidden')}
-function closeSubs(){document.getElementById('subModal').classList.add('hidden')}
-function chooseSub(name){let card=[...document.querySelectorAll('#exerciseList .exercise[data-ex]')].find(x=>x.dataset.ex===subTarget);if(card){card.dataset.ex=name;card.querySelector('h3').textContent=name;let s=card.querySelector('.suggest');if(s)s.textContent=suggested(name,activeDate)}closeSubs()}
-
 function openWorkout(s){let [y,m,d]=s.split('-').map(Number);activeDate=new Date(y,m-1,d);let p=plan[activeDate.getDay()];document.getElementById('today').classList.add('hidden');document.getElementById('program').classList.add('hidden');document.getElementById('progress').classList.add('hidden');document.getElementById('history').classList.add('hidden');document.getElementById('workout').classList.remove('hidden');document.getElementById('tabs').classList.add('hidden');document.getElementById('workoutDate').textContent=fmt(activeDate).toUpperCase();document.getElementById('workoutName').textContent=p.name;stopTimer();
  let old=history().find(x=>x.date===iso(activeDate)), oldSets=old?.sets||[], out='<div class="complete" id="workoutProgress">0 sets complete</div><div class="progressline"><i id="workoutProgressBar"></i></div>';
  p.ex.forEach((e,ei)=>{let n=setsFor(e[1],activeDate), prev=previous(e[0],activeDate);out+=`<div class="exercise" data-ex="${e[0]}"><div class="exhead"><div><h3>${e[0]}</h3><div class="small">${n} × ${repRange(activeDate)} · ${rir(activeDate)} RIR · Previous: ${prev}</div><div class="suggest">${suggested(e[0],activeDate)}</div></div><button class="mini" onclick="openSubs('${e[0].replace(/'/g,"\\'")}')">SWAP</button></div>`;
@@ -150,7 +135,7 @@ function closeWorkout(){stopTimer();document.getElementById('workout').classList
 function saveWorkout(){let p=plan[activeDate.getDay()],sets=[];document.querySelectorAll('#exerciseList .exercise[data-ex]').forEach(ex=>{let name=ex.dataset.ex;ex.querySelectorAll('.setrow').forEach(r=>{sets.push({exercise:name,weight:+r.querySelector('[data-w]').value||0,reps:+r.querySelector('[data-r]').value||0,rir:+r.querySelector('[data-rir]').value||null,done:r.querySelector('.check').classList.contains('done')})})});let run=p.run?{distance:+(document.getElementById('runDist')?.value||0),time:document.getElementById('runTime')?.value||'',hr:+(document.getElementById('runHr')?.value||0),rpe:+(document.getElementById('runRpe')?.value||0),notes:document.getElementById('runNotes')?.value||''}:null;let h=history(),entry={date:iso(activeDate),label:fmt(activeDate),name:p.name,sets,run,volume:sets.reduce((a,s)=>a+s.weight*s.reps,0)};let ix=h.findIndex(x=>x.date===entry.date);if(ix>=0)h[ix]=entry;else h.unshift(entry);localStorage.forgeHistory=JSON.stringify(h);renderHistory();renderProgress();closeWorkout();alert('Workout saved.')}
 function renderHistory(){let h=history(),el=document.getElementById('historyList');el.innerHTML=h.length?h.sort((a,b)=>b.date.localeCompare(a.date)).map(x=>`<div class="history"><div class="row"><div><b>${x.name}</b><div class="small">${x.label||x.date}</div></div><div style="text-align:right"><b>${Math.round(x.volume||0).toLocaleString()} lb</b><div class="small">${x.run&&x.run.distance?x.run.distance+' mi':''}</div></div></div><button class="btn secondary full" style="margin-top:8px" onclick="openWorkout('${x.date}')">OPEN / EDIT</button></div>`).join(''):'<div class="sub">No workouts logged yet.</div>'}
 function renderProgress(){let h=history(),vol=h.reduce((a,x)=>a+(x.volume||0),0),mi=h.reduce((a,x)=>a+(x.run?.distance||0),0);document.getElementById('volume').textContent=Math.round(vol).toLocaleString()+' lb';document.getElementById('sessions').textContent=h.length+' logged session'+(h.length===1?'':'s');document.getElementById('mileage').textContent=mi.toFixed(1)+' mi'}
-function showTab(id,b){['today','program','progress','history','workout'].forEach(x=>document.getElementById(x).classList.add('hidden'));document.getElementById(id).classList.remove('hidden');document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));b.classList.add('active');if(id==='history')renderHistory();if(id==='progress')renderProgress()}
+function showTab(id,b){['today','program','progress','history','workout'].forEach(x=>document.getElementById(x).classList.add('hidden'));document.getElementById(id).classList.remove('hidden');document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));b.classList.add('active');if(id==='history')renderHistory();if(id==='progress')renderProgress();if(id==='program')renderProgram()}
 function init(){renderCalendar();renderProgram();renderHistory();renderProgress()} init();
 </script>
 </body></html>
