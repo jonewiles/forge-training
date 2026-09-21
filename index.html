@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#f5f4ef">
-<meta name="wiles-version" content="3.6">
+<meta name="wiles-version" content="3.7">
 <title>WILES</title>
 <style>
 :root{--bg:#f5f4ef;--card:#fff;--ink:#111;--muted:#73736e;--line:#deddd7;--soft:#ebeae4;--good:#e7eee7}
@@ -58,6 +58,12 @@ input:focus,textarea:focus,select:focus{outline-color:var(--wiles-red)!important
 .savedMedia{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:10px}
 .savedMedia img{width:100%;height:120px;object-fit:cover;border-radius:10px;border:1px solid var(--line)}
 .importStatus{font-size:11px;font-weight:800;color:var(--wiles-red);margin-top:7px}
+
+.accountBtn{border:0;background:var(--soft);border-radius:999px;padding:7px 10px;font-size:11px;font-weight:900}
+.cloudDot{display:inline-block;width:7px;height:7px;border-radius:50%;background:#999;margin-right:5px}.cloudDot.on{background:#1c8b4a}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.42);z-index:60;display:flex;align-items:flex-end;justify-content:center;padding:14px}
+.sheet{background:var(--bg);width:min(100%,680px);border-radius:22px;padding:18px;max-height:88vh;overflow:auto}
+.authInput{width:100%;border:1px solid var(--line);background:#fff;border-radius:12px;padding:13px;margin:6px 0}
 </style>
 <meta name="theme-color" content="#0b0b0b">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -302,6 +308,68 @@ async function cloudUploadPhoto(file,type){
  }catch(e){console.warn('WILES media cloud upload pending:',e.message);return null}
 }
 
-function init(){renderToday();renderProgram();renderHistory();renderProgress()}init();
+
+function openAccount(){document.getElementById('accountModal').classList.remove('hidden');refreshAuthUI()}
+function closeAccount(){document.getElementById('accountModal').classList.add('hidden')}
+async function refreshAuthUI(){
+ let ses=await cloudSession(),out=document.getElementById('signedOutPanel'),inn=document.getElementById('signedInPanel'),dot=document.getElementById('cloudDot'),lab=document.getElementById('accountLabel');
+ if(!out)return;
+ if(ses){out.classList.add('hidden');inn.classList.remove('hidden');document.getElementById('signedInEmail').textContent=ses.user.email||'Signed in';dot?.classList.add('on');if(lab)lab.textContent='Synced'}
+ else{out.classList.remove('hidden');inn.classList.add('hidden');dot?.classList.remove('on');if(lab)lab.textContent='Cloud'}
+}
+async function signUpWiles(){
+ let email=document.getElementById('authEmail').value.trim(),password=document.getElementById('authPassword').value;
+ if(!email||password.length<6){toast('Enter email + 6 character password');return}
+ let {data,error}=await supa.auth.signUp({email,password});
+ if(error){toast(error.message);return}
+ if(data.session){toast('WILES Cloud connected');await refreshAuthUI();await syncAllLocal()}
+ else toast('Check your email to confirm your WILES account');
+}
+async function signInWiles(){
+ let email=document.getElementById('authEmail').value.trim(),password=document.getElementById('authPassword').value;
+ let {error}=await supa.auth.signInWithPassword({email,password});if(error){toast(error.message);return}
+ toast('Signed in');await refreshAuthUI();await syncAllLocal();await pullCloudWorkouts();
+}
+async function signOutWiles(){await supa.auth.signOut();toast('Signed out');refreshAuthUI()}
+async function syncAllLocal(){
+ let ses=await cloudSession();if(!ses){toast('Sign in first');return}
+ let h=JSON.parse(localStorage.forgeHistory||'[]'),ok=0;
+ for(let e of h){let r=await cloudUpsertWorkout(e);if(r.ok)ok++}
+ let el=document.getElementById('syncSummary');if(el)el.textContent=`${ok} of ${h.length} workouts synced`;
+ toast(`${ok} workouts synced`);
+}
+async function pullCloudWorkouts(){
+ let ses=await cloudSession();if(!ses){toast('Sign in first');return}
+ let {data,error}=await supa.from('workouts').select('payload').eq('user_id',ses.user.id);
+ if(error){toast(error.message);return}
+ let local=JSON.parse(localStorage.forgeHistory||'[]'),m=new Map(local.map(x=>[x.key,x]));
+ for(let row of (data||[])){let e=row.payload;if(e?.key)m.set(e.key,e)}
+ localStorage.forgeHistory=JSON.stringify([...m.values()]);
+ renderToday();renderHistory();renderProgress();toast(`${data?.length||0} cloud workouts restored`);
+}
+if(supa){supa.auth.onAuthStateChange(()=>setTimeout(refreshAuthUI,0))}
+
+function init(){renderToday();renderProgram();renderHistory();renderProgress()}init();refreshAuthUI();
 </script>
+
+<div id="accountModal" class="modal hidden" onclick="if(event.target===this)closeAccount()">
+ <div class="sheet">
+  <div class="row"><h2>WILES Cloud</h2><button class="btn ghost" onclick="closeAccount()">Done</button></div>
+  <div id="signedOutPanel">
+   <p class="sub">Sign in to sync workouts and photos securely across devices.</p>
+   <input id="authEmail" class="authInput" type="email" autocomplete="email" placeholder="Email">
+   <input id="authPassword" class="authInput" type="password" autocomplete="current-password" placeholder="Password (6+ characters)">
+   <button class="btn full" onclick="signInWiles()">SIGN IN</button>
+   <button class="btn secondary full" style="margin-top:8px" onclick="signUpWiles()">CREATE ACCOUNT</button>
+  </div>
+  <div id="signedInPanel" class="hidden">
+   <p class="sub" id="signedInEmail"></p>
+   <div class="card"><b>Cloud Sync</b><div class="small" id="syncSummary">Ready</div></div>
+   <button class="btn full" onclick="syncAllLocal()">SYNC THIS DEVICE NOW</button>
+   <button class="btn secondary full" style="margin-top:8px" onclick="pullCloudWorkouts()">RESTORE FROM CLOUD</button>
+   <button class="btn ghost full" style="margin-top:8px" onclick="signOutWiles()">Sign out</button>
+  </div>
+ </div>
+</div>
+
 </body></html>
