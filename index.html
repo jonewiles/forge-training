@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#f5f4ef">
-<meta name="wiles-version" content="3.7">
+<meta name="wiles-version" content="3.9">
 <title>WILES</title>
 <style>
 :root{--bg:#f5f4ef;--card:#fff;--ink:#111;--muted:#73736e;--line:#deddd7;--soft:#ebeae4;--good:#e7eee7}
@@ -74,7 +74,7 @@ input:focus,textarea:focus,select:focus{outline-color:var(--wiles-red)!important
 </head>
 <body>
 <main class="app">
-<header class="header" id="mainHeader"><button class="brand" onclick="goHome()"><img src="wiles-wordmark-v34.png" alt="WILES"></button><div class="phase" id="phase"></div></header>
+<header class="header" id="mainHeader"><button class="brand" onclick="goHome()"><img src="wiles-wordmark-v34.png" alt="WILES"></button><div class="row" style="gap:7px"><div class="phase" id="phase"></div><button class="accountBtn" onclick="openAccount()"><span class="cloudDot" id="cloudDot"></span><span id="accountLabel">Account</span></button></div></header>
 
 <section id="today">
 <h1 class="pageTitle">Today</h1><div id="todayHero"></div>
@@ -125,7 +125,9 @@ input:focus,textarea:focus,select:focus{outline-color:var(--wiles-red)!important
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 const SUPABASE_URL="https://gmwizzeetcjgrcyqhmxm.supabase.co",SUPABASE_PUBLISHABLE_KEY="sb_publishable_4OLTvYPcp3b0S5jVUhh9Vw_t0sy_Wew";
-const supa=window.supabase?window.supabase.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY):null;
+const supa=window.supabase?window.supabase.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY,{
+ auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true,storage:window.localStorage}
+}):null;
 const START=new Date(2026,8,21),HYROX=new Date(2026,11,21);
 const sessions={
 1:[{id:'push',name:'Push + Power',sub:'Chest · shoulders · triceps · power',warm:['3–4 min easy Assault Bike','Band pull-aparts × 15','Scap push-ups × 10','Arm circles × 10/side'],primer:['Explosive push-up · 3 × 3–5 · full recovery'],preMain:['2–3 progressive bench warm-up sets'],ex:[['Barbell Bench Press',4,'main'],['Incline DB Press',3,'secondary'],['Seated DB Shoulder Press',3,'secondary'],['Cable / Machine Fly',3,'accessory'],['Lateral Raise',3,'accessory'],['Triceps Pressdown',3,'accessory'],['Overhead Triceps Extension',2,'accessory'],['Cable Crunch',3,'accessory']],skillType:'ski-wall'}],
@@ -314,16 +316,16 @@ function closeAccount(){document.getElementById('accountModal').classList.add('h
 async function refreshAuthUI(){
  let ses=await cloudSession(),out=document.getElementById('signedOutPanel'),inn=document.getElementById('signedInPanel'),dot=document.getElementById('cloudDot'),lab=document.getElementById('accountLabel');
  if(!out)return;
- if(ses){out.classList.add('hidden');inn.classList.remove('hidden');document.getElementById('signedInEmail').textContent=ses.user.email||'Signed in';dot?.classList.add('on');if(lab)lab.textContent='Synced'}
- else{out.classList.remove('hidden');inn.classList.add('hidden');dot?.classList.remove('on');if(lab)lab.textContent='Cloud'}
+ if(ses){out.classList.add('hidden');inn.classList.remove('hidden');document.getElementById('signedInEmail').textContent=ses.user.email||'Signed in';dot?.classList.add('on');if(lab)lab.textContent='Account'}
+ else{out.classList.remove('hidden');inn.classList.add('hidden');dot?.classList.remove('on');if(lab)lab.textContent='Account'}
 }
 async function signUpWiles(){
  let email=document.getElementById('authEmail').value.trim(),password=document.getElementById('authPassword').value;
  if(!email||password.length<6){toast('Enter email + 6 character password');return}
  let {data,error}=await supa.auth.signUp({email,password});
  if(error){toast(error.message);return}
- if(data.session){toast('WILES Cloud connected');await refreshAuthUI();await syncAllLocal()}
- else toast('Check your email to confirm your WILES account');
+ if(data.session){toast('Account created');await refreshAuthUI();await syncAllLocal()}
+ else toast('Check your email to confirm your account');
 }
 async function signInWiles(){
  let email=document.getElementById('authEmail').value.trim(),password=document.getElementById('authPassword').value;
@@ -354,9 +356,9 @@ function init(){renderToday();renderProgram();renderHistory();renderProgress()}i
 
 <div id="accountModal" class="modal hidden" onclick="if(event.target===this)closeAccount()">
  <div class="sheet">
-  <div class="row"><h2>WILES Cloud</h2><button class="btn ghost" onclick="closeAccount()">Done</button></div>
+  <div class="row"><h2>Account</h2><button class="btn ghost" onclick="closeAccount()">Done</button></div>
   <div id="signedOutPanel">
-   <p class="sub">Sign in to sync workouts and photos securely across devices.</p>
+   <p class="sub">Create an account or sign in to keep your workouts and photos saved across devices.</p>
    <input id="authEmail" class="authInput" type="email" autocomplete="email" placeholder="Email">
    <input id="authPassword" class="authInput" type="password" autocomplete="current-password" placeholder="Password (6+ characters)">
    <button class="btn full" onclick="signInWiles()">SIGN IN</button>
@@ -364,7 +366,7 @@ function init(){renderToday();renderProgram();renderHistory();renderProgress()}i
   </div>
   <div id="signedInPanel" class="hidden">
    <p class="sub" id="signedInEmail"></p>
-   <div class="card"><b>Cloud Sync</b><div class="small" id="syncSummary">Ready</div></div>
+   <div class="card"><b>WILES Sync</b><div class="small" id="syncSummary">Ready</div></div>
    <button class="btn full" onclick="syncAllLocal()">SYNC THIS DEVICE NOW</button>
    <button class="btn secondary full" style="margin-top:8px" onclick="pullCloudWorkouts()">RESTORE FROM CLOUD</button>
    <button class="btn ghost full" style="margin-top:8px" onclick="signOutWiles()">Sign out</button>
