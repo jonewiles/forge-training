@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#f5f4ef">
-<meta name="wiles-version" content="4.1">
+<meta name="wiles-version" content="4.2">
 <title>WILES</title>
 <style>
 :root{--bg:#f5f4ef;--card:#fff;--ink:#111;--muted:#73736e;--line:#deddd7;--soft:#ebeae4;--good:#e7eee7}
@@ -72,6 +72,12 @@ input:focus,textarea:focus,select:focus{outline-color:var(--wiles-red)!important
 .accountText{font-size:10px}.settingsRow{display:flex;justify-content:space-between;gap:12px;padding:14px 0;border-top:1px solid var(--line)}
 .settingsRow:first-child{border-top:0}.settingsLabel{font-weight:850}.settingsValue{font-size:12px;color:var(--muted);text-align:right;max-width:58%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.nameGrid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 @media(max-width:390px){.brand img{max-width:74px}.phase{font-size:9px;padding:7px 6px}.accountText{display:inline;font-size:9px}.accountBtn{padding:7px 6px}.headerRight{gap:4px}}
+
+.trainingStage{display:flex;align-items:center;justify-content:space-between;gap:12px;border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:9px 1px;margin:0 0 18px}
+.stageLabel{font-size:9px;font-weight:900;letter-spacing:.1em;color:var(--muted)}
+.trainingStage strong{font-size:12px;letter-spacing:.02em;white-space:nowrap}
+.header .accountBtn{margin-left:auto}
+@media(max-width:390px){.trainingStage{padding:8px 1px;margin-bottom:16px}.trainingStage strong{font-size:11px}}
 </style>
 <meta name="theme-color" content="#0b0b0b">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -82,7 +88,7 @@ input:focus,textarea:focus,select:focus{outline-color:var(--wiles-red)!important
 </head>
 <body>
 <main class="app">
-<header class="header" id="mainHeader"><button class="brand" onclick="goHome()"><img src="wiles-wordmark-v34.png" alt="WILES"></button><div class="headerRight"><div class="phase" id="phase"></div><button class="accountBtn" onclick="openAccount()" aria-label="Account"><span class="cloudDot" id="cloudDot"></span><span class="accountText" id="accountLabel">Account</span></button></div></header>
+<header class="header" id="mainHeader"><button class="brand" onclick="goHome()"><img src="wiles-wordmark-v34.png" alt="WILES"></button><button class="accountBtn" onclick="openAccount()" aria-label="Account"><span class="cloudDot" id="cloudDot"></span><span class="accountText" id="accountLabel">Account</span></button></header><div class="trainingStage"><span class="stageLabel">TRAINING STAGE</span><strong id="phase"></strong></div>
 
 <section id="today">
 <h1 class="pageTitle">Today</h1><div id="todayHero"></div>
