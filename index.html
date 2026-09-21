@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#f5f4ef">
-<meta name="wiles-version" content="3.3">
+<meta name="wiles-version" content="3.4">
 <title>WILES</title>
 <style>
 :root{--bg:#f5f4ef;--card:#fff;--ink:#111;--muted:#73736e;--line:#deddd7;--soft:#ebeae4;--good:#e7eee7}
@@ -35,6 +35,25 @@ button.primary,.primary,.startbtn{background:var(--wiles-red)!important;color:#f
 .sectionlabel b{color:var(--wiles-red);}
 .skillcard{border-left:3px solid var(--wiles-red)!important;}
 input:focus,textarea:focus,select:focus{outline-color:var(--wiles-red)!important;border-color:var(--wiles-red)!important;}
+
+/* WILES V3.4 */
+:root{--wiles-red:#c91f2c;}
+.app{padding-top:env(safe-area-inset-top)}
+.header{height:72px;top:0;padding-top:4px}
+.brand{display:flex;align-items:center;border:0;background:none;padding:5px 0}
+.brand img{display:block;width:112px;height:38px;object-fit:contain;object-position:left center}
+.phase{white-space:nowrap;max-width:48%;overflow:hidden;text-overflow:ellipsis}
+.pageTitle{font-size:31px;line-height:1;margin:12px 0 18px;letter-spacing:-.8px}
+.pageTitle:after,.workoutTitleRule:after{content:"";display:block;width:42px;height:2px;background:var(--wiles-red);margin-top:10px}
+.workoutHead{top:env(safe-area-inset-top);padding-top:8px}
+.workoutHead .back{padding-top:4px}
+.envcard{background:#fff;border:1px solid var(--line);border-radius:15px;padding:14px;margin:10px 0 16px}
+.envscroll{display:flex;gap:7px;overflow-x:auto;padding:9px 0 2px;scrollbar-width:none}.envscroll::-webkit-scrollbar{display:none}
+.envbtn{flex:0 0 auto;border:1px solid var(--line);background:#fff;border-radius:999px;padding:9px 12px;font-size:10px;font-weight:900}
+.envbtn.active{background:#111;color:#fff}.envbtn.tour.active{background:var(--wiles-red);border-color:var(--wiles-red)}
+.importbox{border:1px dashed var(--line);border-radius:13px;padding:12px;margin:10px 0;background:#faf9f5}
+.importbox input[type=file]{width:100%;font-size:12px}.importPreview{max-width:100%;max-height:220px;border-radius:10px;margin-top:8px}
+.aiHint{font-size:11px;color:var(--muted);line-height:1.35;margin-top:6px}
 </style>
 <meta name="theme-color" content="#0b0b0b">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -45,25 +64,24 @@ input:focus,textarea:focus,select:focus{outline-color:var(--wiles-red)!important
 </head>
 <body>
 <main class="app">
-<header class="header" id="mainHeader"><button class="brand" onclick="goHome()">WILES</button><div class="phase" id="phase"></div></header>
+<header class="header" id="mainHeader"><button class="brand" onclick="goHome()"><img src="wiles-wordmark-v34.png" alt="WILES"></button><div class="phase" id="phase"></div></header>
 
 <section id="today">
-<div class="eyebrow">Today</div><h1 id="todayGreeting">Your training.</h1><div id="todayHero"></div>
+<h1 class="pageTitle">Today</h1><div id="todayHero"></div>
 <div class="row" style="margin-top:22px"><div><div class="eyebrow">This week</div><h2 id="thisWeekTitle"></h2></div><button class="btn ghost" onclick="openProgramCurrent()">Full program →</button></div>
 <div class="card daylist" id="todayWeek"></div>
 </section>
 
 <section id="program" class="hidden">
-<div class="eyebrow">Program</div><h1>Training plan.</h1>
+<h1 class="pageTitle">Program</h1>
 <div class="card"><div class="weekstrip"><button class="arrow" onclick="shiftProgram(-1)">‹</button><div class="weekcenter"><b id="programWeek"></b><span class="small" id="programWeekMeta"></span></div><button class="arrow" onclick="shiftProgram(1)">›</button></div><button id="currentWeekBtn" class="btn secondary full" onclick="programOffset=0;renderProgram()">RETURN TO CURRENT WEEK</button></div>
 <div id="programOverview"></div>
 <div class="card daylist"><div class="row" style="padding-bottom:5px"><b>Week schedule</b><span class="small">Tap any workout</span></div><div id="programDays"></div></div>
-<div class="card"><b>Training environment</b><div class="small">Use this when equipment changes on the road.</div><div class="modegrid"><button id="mFull" class="mode" onclick="setMode('Full Gym')">FULL GYM</button><button id="mHotel" class="mode" onclick="setMode('Hotel Gym')">HOTEL GYM</button><button id="mDB" class="mode" onclick="setMode('Dumbbells')">DB ONLY</button></div></div>
 <div class="card"><b>Why this week?</b><div class="note" id="programNote"></div></div>
 </section>
 
 <section id="progress" class="hidden">
-<div class="eyebrow">Progress</div><h1>Your build.</h1>
+<h1 class="pageTitle">Progress</h1>
 <div class="card hero" id="buildCard"></div>
 <div class="eyebrow" style="margin-top:22px">This week</div><div class="metricgrid" id="weekMetrics"></div>
 <div class="card"><div class="row"><div><b>Training consistency</b><div class="small">Completed sessions by week</div></div><span class="pill" id="consistencyPill"></span></div><div class="chart" id="sessionChart"></div></div>
@@ -72,10 +90,12 @@ input:focus,textarea:focus,select:focus{outline-color:var(--wiles-red)!important
 <div class="card"><div class="row"><div><b>HYROX / Athletic</b><div class="small">Race-relevant skill exposure</div></div><span class="pill" id="hyroxPill"></span></div><div class="metricgrid" id="hyroxMetrics"></div></div>
 </section>
 
-<section id="history" class="hidden"><div class="eyebrow">History</div><h1>Training log.</h1><div class="card" id="historyList"></div></section>
+<section id="history" class="hidden"><h1 class="pageTitle">History</h1><div class="card" id="historyList"></div></section>
 
 <section id="workout" class="hidden">
-<div class="workoutHead"><button class="back" onclick="backFromWorkout()">← BACK</button><div class="eyebrow" id="workoutDate"></div><div class="row"><h2 id="workoutName"></h2><span class="small" id="workoutCount"></span></div><div class="progressline"><i id="workoutBar"></i></div></div>
+<div class="workoutHead"><button class="back" onclick="backFromWorkout()">← BACK</button><div class="eyebrow" id="workoutDate"></div><div class="row workoutTitleRule"><h2 id="workoutName"></h2><span class="small" id="workoutCount"></span></div><div class="progressline"><i id="workoutBar"></i></div></div>
+<div id="workoutEnvironment" class="envcard"></div>
+<div id="smartImport" class="envcard"></div>
 <div id="restTimer" class="timer hidden"><b>REST <span id="timerValue">1:30</span></b><div><button onclick="addTimer(30)">+30 SEC</button> <button onclick="stopTimer()">SKIP</button></div></div>
 <div class="card" id="exerciseList"></div>
 <div class="finishbar"><button class="btn full" onclick="saveWorkout()">FINISH & SAVE WORKOUT</button></div>
@@ -136,7 +156,7 @@ function runWarmup(){return ['3–5 min brisk walk → easy jog','Ankle rocks ×
 function runPrescription(d,s){let w=weekOf(d),c=Math.floor((w-1)/4),deload=wave(d)===4;if(s.run==='easy'){let m=Math.max(2.5,Math.min(4.5,3+c*.5-(deload?.5:0)));return m.toFixed(1)+' mi easy · conversational';}if(s.run==='tempo'){let mins=Math.max(10,Math.min(30,15+c*5-(deload?5:0)));return '10 min easy + '+mins+' min controlled tempo + 5–10 min easy';}if(s.run==='long'){let m=Math.max(3.5,Math.min(7,4.5+c*.5-(deload?.75:0)));return m.toFixed(1)+' mi easy · relaxed, even effort';}return''}
 function fmt(d){return d.toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'})} function hist(){try{return JSON.parse(localStorage.forgeHistory||'[]')}catch(e){return[]}} function key(d,id){return iso(d)+'__'+id}
 function entryKey(x){return x.key||x.date+'__'+(x.sessionId||'legacy')} function completed(d,id){return hist().some(x=>entryKey(x)===key(d,id))}
-function mode(){return localStorage.forgeMode||'Full Gym'} function weekDates(base){return Array.from({length:7},(_,i)=>{let d=new Date(base);d.setDate(d.getDate()+i);return d})}
+function mode(){return localStorage.wilesMode||localStorage.forgeMode||'Home Gym'} function weekDates(base){return Array.from({length:7},(_,i)=>{let d=new Date(base);d.setDate(d.getDate()+i);return d})}
 function weekLabel(base){let e=new Date(base);e.setDate(e.getDate()+6);return base.toLocaleDateString('en-US',{month:'short',day:'numeric'})+' – '+e.toLocaleDateString('en-US',{month:'short',day:'numeric'})}
 function toast(msg){let x=document.getElementById('toast');x.textContent=msg;x.classList.remove('hidden');setTimeout(()=>x.classList.add('hidden'),1600)}
 function dayState(d){let ss=sessions[d.getDay()],done=ss.filter(s=>s.rest||completed(d,s.id)).length;if(done===ss.length)return['✓ DONE','done'];if(done>0)return[done+'/'+ss.length+' DONE',''];if(iso(d)===iso(today))return['TODAY',''];if(d<today)return['MISSED',''];return['UPCOMING','']}
@@ -149,8 +169,57 @@ function dayRow(d,from){let ss=sessions[d.getDay()],[st,cl]=dayState(d),title=ss
 function openDay(ds,from){let d=parseDate(ds),ss=sessions[d.getDay()];if(ss.length===1)return openWorkout(ds,ss[0].id,from);document.getElementById('subTitle').textContent='Choose session';document.getElementById('subChoices').innerHTML=sessionButtons(d,from);document.getElementById('subModal').classList.remove('hidden')}
 function programBase(){let d=monday(today);d.setDate(d.getDate()+programOffset*7);return d} function shiftProgram(n){programOffset+=n;renderProgram()} function openProgramCurrent(){programOffset=0;showTab('program')}
 function programNote(d){let w=wave(d);return w===1?'Build 1 · Accumulate quality volume. Leave 1–3 reps in reserve and establish loads to progress.':w===2?'Build 2 · Add reps or load where last week was clean while keeping 1–3 RIR.':w===3?'Build 3 · Heavier emphasis. Push performance without grinding and protect run quality.':'Deload · Cut working sets roughly 40–50%, keep 3–4 RIR, and finish the week fresh.'}
-function renderProgram(){let b=programBase(),w=wave(b),info=b<HYROX?['PRE-HYROX BUILD','Muscle · strength · aerobic durability']:['HYROX SPECIFIC','Race-specific strength + running under fatigue'];document.getElementById('programWeek').textContent=weekLabel(b);document.getElementById('programWeekMeta').textContent='Week '+weekOf(b)+' · '+(w===4?'Deload':'Build '+w);document.getElementById('currentWeekBtn').classList.toggle('hidden',programOffset===0);document.getElementById('programOverview').innerHTML=`<div class="card hero"><div class="eyebrow">${info[0]}</div><h2>${info[1]}</h2><div class="programwave">${[1,2,3,4].map(x=>`<div class="wave ${x===w?'active':''}">${x===4?'DELOAD':'BUILD '+x}<br>${x===1?'VOLUME':x===2?'BUILD':x===3?'HEAVY':'RESET'}</div>`).join('')}</div></div>`;document.getElementById('programDays').innerHTML=weekDates(b).map(d=>dayRow(d,'program')).join('');document.getElementById('programNote').textContent=programNote(b);['mFull','mHotel','mDB'].forEach(x=>document.getElementById(x).classList.remove('active'));document.getElementById(mode()==='Full Gym'?'mFull':mode()==='Hotel Gym'?'mHotel':'mDB').classList.add('active')}
-function setMode(m){localStorage.forgeMode=m;renderProgram();toast(m+' selected')}
+function renderProgram(){let b=programBase(),w=wave(b),info=b<HYROX?['PRE-HYROX BUILD','Muscle · strength · aerobic durability']:['HYROX SPECIFIC','Race-specific strength + running under fatigue'];document.getElementById('programWeek').textContent=weekLabel(b);document.getElementById('programWeekMeta').textContent='Week '+weekOf(b)+' · '+(w===4?'Deload':'Build '+w);document.getElementById('currentWeekBtn').classList.toggle('hidden',programOffset===0);document.getElementById('programOverview').innerHTML=`<div class="card hero"><div class="eyebrow">${info[0]}</div><h2>${info[1]}</h2><div class="programwave">${[1,2,3,4].map(x=>`<div class="wave ${x===w?'active':''}">${x===4?'DELOAD':'BUILD '+x}<br>${x===1?'VOLUME':x===2?'BUILD':x===3?'HEAVY':'RESET'}</div>`).join('')}</div></div>`;document.getElementById('programDays').innerHTML=weekDates(b).map(d=>dayRow(d,'program')).join('');document.getElementById('programNote').textContent=programNote(b)}
+function setMode(m){localStorage.wilesMode=m;localStorage.forgeMode=m;renderWorkoutEnvironment();applyEnvironment();toast(m+' selected')}
+
+const envMaps={
+ 'Hotel Gym':{
+  'Barbell Bench Press':'DB Bench Press','Incline DB Press':'Incline DB Press','Seated DB Shoulder Press':'Seated DB Shoulder Press',
+  'Cable / Machine Fly':'Cable Fly','Pull-up / Lat Pulldown':'Lat Pulldown','Chest-Supported Row':'Chest-Supported DB Row',
+  'Back Squat':'DB Front Squat','Romanian Deadlift':'DB Romanian Deadlift','Loaded Walking Lunge':'DB Walking Lunge',
+  'Leg Curl':'Slider Leg Curl','Leg Extension':'Goblet Cyclist Squat','EZ-Bar Curl':'DB Curl','Pec Deck':'Cable Fly'
+ },
+ 'DB Only':{
+  'Barbell Bench Press':'DB Bench Press','Cable / Machine Fly':'DB Fly','Triceps Pressdown':'DB Skullcrusher',
+  'Pull-up / Lat Pulldown':'DB Pullover','Chest-Supported Row':'Chest-Supported DB Row','Single-Arm Cable Row':'1-Arm DB Row',
+  'Back Squat':'DB Front Squat','Romanian Deadlift':'DB Romanian Deadlift','Loaded Walking Lunge':'DB Walking Lunge',
+  'Leg Curl':'DB Hamstring Curl','Leg Extension':'Goblet Cyclist Squat','Cable Lateral Raise':'DB Lateral Raise',
+  'EZ-Bar Curl':'DB Curl','Cable Curl':'DB Curl','Rope Pressdown':'Close-Grip Push-Up','Seated Cable Row':'1-Arm DB Row',
+  'Pec Deck':'DB Fly','Straight-Arm Pulldown':'DB Pullover'
+ },
+ 'Body Weight':{
+  'Barbell Bench Press':'Push-Up','Incline DB Press':'Feet-Elevated Push-Up','Seated DB Shoulder Press':'Pike Push-Up',
+  'Cable / Machine Fly':'Slow Push-Up','Lateral Raise':'Prone Y Raise','Triceps Pressdown':'Diamond Push-Up',
+  'Overhead Triceps Extension':'Close-Grip Push-Up','Pull-up / Lat Pulldown':'Prone Lat Pull / Doorway Row',
+  'Chest-Supported Row':'Bodyweight Row / Towel Row','Single-Arm Cable Row':'Towel Row','Incline DB Curl':'Isometric Towel Curl',
+  'Hammer Curl':'Isometric Towel Curl','Back Squat':'Tempo Air Squat','Romanian Deadlift':'Single-Leg Hip Hinge',
+  'Loaded Walking Lunge':'Walking Lunge','Leg Curl':'Slider Leg Curl','Leg Extension':'Reverse Nordic',
+  'Standing Calf Raise':'Single-Leg Calf Raise','Seated Cable Row':'Bodyweight Row / Towel Row','Pec Deck':'Push-Up',
+  'Straight-Arm Pulldown':'Prone Lat Pull','Biceps':'Isometric Towel Curl','Triceps':'Diamond Push-Up'
+ }
+};
+let workoutBaseHTML='';
+function renderWorkoutEnvironment(){
+ let el=document.getElementById('workoutEnvironment'); if(!el||!activeSession)return;
+ let m=mode(),opts=['Home Gym','Hotel Gym','DB Only','Body Weight','Tour Workout'];
+ el.innerHTML=`<div class="eyebrow">Training environment</div><div class="envscroll">${opts.map(x=>`<button class="envbtn ${x===m?'active':''} ${x==='Tour Workout'?'tour':''}" onclick="setMode('${x}')">${x.toUpperCase()}</button>`).join('')}</div><div class="small">${m==='Home Gym'?'Full equipment.':m==='Hotel Gym'?'Assumes dumbbells to 50 lb, cable machine and treadmill.':m==='DB Only'?'Dumbbell substitutions throughout.':m==='Body Weight'?'No equipment required.':'Log the workout your tour provides instead of the programmed session.'}</div>`;
+}
+function applyEnvironment(){
+ if(!workoutBaseHTML)return;
+ let list=document.getElementById('exerciseList'),m=mode(); list.innerHTML=workoutBaseHTML;
+ if(m==='Tour Workout'){list.innerHTML=`<div class="sectionlabel"><b>TOUR WORKOUT</b></div><div class="exercise"><h3>Log today's tour workout</h3><div class="runfields"><textarea id="tourDescription" placeholder="Paste or type the workout description"></textarea></div><div class="importbox"><b>Workout photo</b><div class="small">Choose a screenshot or photo of the workout.</div><input id="tourPhoto" type="file" accept="image/*" onchange="previewImport(this,'tourPreview')"><img id="tourPreview" class="importPreview hidden"></div><div class="aiHint">Photo-to-workout extraction is staged in this version. The image is saved for review, but true automatic reading requires a secure AI/backend service rather than exposing an API key in the public GitHub Pages app.</div></div>`;}
+ else if(m!=='Home Gym'){
+   let map=envMaps[m]||{};
+   document.querySelectorAll('#exerciseList .exercise[data-ex]').forEach(card=>{let old=card.dataset.ex,n=map[old];if(n){card.dataset.ex=n;card.querySelector('h3').textContent=n;}});
+ }
+ updateProgress();
+}
+function previewImport(inp,id){let f=inp.files&&inp.files[0];if(!f)return;let img=document.getElementById(id);img.src=URL.createObjectURL(f);img.classList.remove('hidden')}
+function renderSmartImport(){
+ let el=document.getElementById('smartImport');if(!el||!activeSession)return;
+ el.innerHTML=`<div class="eyebrow">Smart import</div><b>WHOOP / Strava screenshot</b><div class="small">Attach a workout screenshot to speed up logging.</div><div class="importbox"><input id="trackerPhoto" type="file" accept="image/*" onchange="previewImport(this,'trackerPreview')"><img id="trackerPreview" class="importPreview hidden"></div><div class="aiHint">The upload interface is ready. Automatic extraction and autofill will be enabled once WILES has a secure server-side vision service; GitHub Pages alone cannot safely hold the AI credentials needed to read screenshots.</div>`;
+}
+
 function showTab(id){['today','program','progress','history','workout'].forEach(x=>document.getElementById(x).classList.add('hidden'));document.getElementById(id).classList.remove('hidden');document.getElementById('tabs').classList.remove('hidden');document.getElementById('mainHeader').classList.remove('hidden');document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('active',x.dataset.tab===id));if(id==='today')renderToday();if(id==='program')renderProgram();if(id==='progress')renderProgress();if(id==='history')renderHistory();window.scrollTo(0,0)}
 function goHome(){showTab('today')} function previous(ex,date){let h=hist().filter(x=>x.date<iso(date)).sort((a,b)=>b.date.localeCompare(a.date));for(let w of h){let f=(w.sets||[]).filter(s=>s.exercise===ex&&s.weight&&s.reps);if(f.length){let s=f[f.length-1];return s.weight+' lb × '+s.reps}}return'No previous log'}
 function suggested(ex,date,type='secondary'){let h=hist().filter(x=>x.date<iso(date)).sort((a,b)=>b.date.localeCompare(a.date));for(let w of h){let f=(w.sets||[]).filter(s=>s.exercise===ex&&s.weight&&s.reps);if(f.length){let last=f[f.length-1],range=exReps(type,date),top=parseInt(range.split('–')[1]||range),ready=f.every(s=>s.reps>=top&&(s.rir===null||s.rir>=1)),inc=last.weight>=100?5:2.5;return ready?'Try '+(last.weight+inc)+' lb':'Repeat '+last.weight+' lb'}}return'Choose a load leaving '+rir(date)+' RIR'}
@@ -161,7 +230,7 @@ function openWorkout(ds,id,from){closeSubs();activeDate=parseDate(ds);activeSess
  if((s.ex||[]).length)out+='<div class="sectionlabel"><b>STRENGTH + HYPERTROPHY</b></div>';
  (s.ex||[]).forEach((e,idx)=>{if(idx===0&&s.preMain)out+=prepSection('LIFT-SPECIFIC WARM-UP',s.preMain,oldPrep);let n=setsFor(e[1],activeDate),type=e[2]||'secondary',sp=specialExercise(e[0],activeDate),range=sp?sp.reps:exReps(type,activeDate),olds=oldSets.filter(x=>x.exercise===e[0]);out+=`<div class="exercise" data-ex="${e[0]}" data-type="${type}"><div class="exhead"><div><h3>${e[0]}</h3><div class="small">${n} × ${range} · ${rir(activeDate)} RIR · Previous: ${previous(e[0],activeDate)}</div>${sp?`<div class="skillwhy">${sp.note}</div>`:''}<div class="suggest">${suggested(e[0],activeDate,type)}</div></div><button class="mini" onclick="openSubs('${e[0].replace(/'/g,"\\'")}')">SWAP</button></div><div class="sethead"><span>SET</span><span>LB</span><span>REPS</span><span>RIR</span><span>DONE</span></div>`;for(let i=0;i<n;i++){let o=olds[i]||{};out+=`<div class="setrow"><b>${i+1}</b><input data-w inputmode="decimal" value="${o.weight||''}"><input data-r inputmode="numeric" value="${o.reps||''}"><input data-rir inputmode="numeric" value="${o.rir??''}"><button class="check ${o.done?'done':''}" onclick="toggleSet(this)">${o.done?'✓':''}</button></div>`}out+='</div>'});
  if(s.run){let r=old?.run||{};out+=`<div class="sectionlabel"><b>RUN</b></div><div class="exercise"><h3>${runPrescription(activeDate,s)}</h3><div class="runfields"><input id="runDist" inputmode="decimal" placeholder="Distance (mi)" value="${r.distance||''}"><input id="runTime" placeholder="Time" value="${r.time||''}"><input id="runHr" inputmode="numeric" placeholder="Avg HR" value="${r.hr||''}"><input id="runRpe" inputmode="numeric" placeholder="RPE" value="${r.rpe||''}"><textarea id="runNotes" placeholder="Notes">${r.notes||''}</textarea></div></div>`}
- let hs=hyroxSkill(activeDate,s);if(hs){let done=oldPrep.includes('HYROX-0'),he=old?.hyrox||{};out+=`<div class="sectionlabel"><b>HYROX SKILL</b></div><div class="skillcard"><h3>${hs.title}</h3><div class="prepitem"><button class="prepcheck ${done?'done':''}" data-prep="HYROX-0" onclick="togglePrep(this)">${done?'✓':''}</button><div><b>${hs.work}</b><div class="skillwhy">${hs.detail}</div></div></div>${hs.kind==='erg'?`<div class="runfields"><input id="ergPace" placeholder="Avg pace /500m" value="${he.pace||''}"><input id="ergTime" placeholder="Total erg time" value="${he.time||''}"><input id="ergSpm" inputmode="numeric" placeholder="${hs.erg==='row'?'Avg SPM':'Stroke rate (opt.)'}" value="${he.spm||''}"><input id="ergRpe" inputmode="numeric" placeholder="Erg RPE" value="${he.rpe||''}"></div><div class="small" style="margin-top:8px">Log the erg portion only. WILES will use this to build your ${hs.erg==='ski'?'SkiErg':'RowErg'} pace history.</div>`:''}</div>`}if(s.rest)out='<div class="empty"><b>Recovery day</b><div class="small" style="margin-top:5px">No workout to log today.</div></div>';document.getElementById('exerciseList').innerHTML=out;updateProgress();window.scrollTo(0,0)}
+ let hs=hyroxSkill(activeDate,s);if(hs){let done=oldPrep.includes('HYROX-0'),he=old?.hyrox||{};out+=`<div class="sectionlabel"><b>HYROX SKILL</b></div><div class="skillcard"><h3>${hs.title}</h3><div class="prepitem"><button class="prepcheck ${done?'done':''}" data-prep="HYROX-0" onclick="togglePrep(this)">${done?'✓':''}</button><div><b>${hs.work}</b><div class="skillwhy">${hs.detail}</div></div></div>${hs.kind==='erg'?`<div class="runfields"><input id="ergPace" placeholder="Avg pace /500m" value="${he.pace||''}"><input id="ergTime" placeholder="Total erg time" value="${he.time||''}"><input id="ergSpm" inputmode="numeric" placeholder="${hs.erg==='row'?'Avg SPM':'Stroke rate (opt.)'}" value="${he.spm||''}"><input id="ergRpe" inputmode="numeric" placeholder="Erg RPE" value="${he.rpe||''}"></div><div class="small" style="margin-top:8px">Log the erg portion only. WILES will use this to build your ${hs.erg==='ski'?'SkiErg':'RowErg'} pace history.</div>`:''}</div>`}if(s.rest)out='<div class="empty"><b>Recovery day</b><div class="small" style="margin-top:5px">No workout to log today.</div></div>';document.getElementById('exerciseList').innerHTML=out;workoutBaseHTML=out;renderWorkoutEnvironment();renderSmartImport();applyEnvironment();window.scrollTo(0,0)}
 function backFromWorkout(){stopTimer();document.getElementById('workout').classList.add('hidden');showTab(returnTab)}
 function updateProgress(){let all=[...document.querySelectorAll('#exerciseList .check')],done=all.filter(x=>x.classList.contains('done')).length;document.getElementById('workoutCount').textContent=all.length?done+' / '+all.length+' sets':'';document.getElementById('workoutBar').style.width=(all.length?done/all.length*100:0)+'%'} function toggleSet(b){b.classList.toggle('done');b.textContent=b.classList.contains('done')?'✓':'';updateProgress();if(b.classList.contains('done'))startTimer(90)}
 function startTimer(n){stopTimer();restSeconds=n;document.getElementById('restTimer').classList.remove('hidden');paintTimer();restInterval=setInterval(()=>{restSeconds--;paintTimer();if(restSeconds<=0)stopTimer()},1000)} function paintTimer(){document.getElementById('timerValue').textContent=Math.floor(restSeconds/60)+':'+String(Math.max(0,restSeconds%60)).padStart(2,'0')} function addTimer(n){restSeconds+=n;paintTimer()} function stopTimer(){if(restInterval)clearInterval(restInterval);restInterval=null;restSeconds=0;document.getElementById('restTimer').classList.add('hidden')}
