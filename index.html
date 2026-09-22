@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#f5f4ef">
-<meta name="wiles-version" content="4.2">
+<meta name="wiles-version" content="4.4">
 <title>WILES</title>
 <style>
 :root{--bg:#f5f4ef;--card:#fff;--ink:#111;--muted:#73736e;--line:#deddd7;--soft:#ebeae4;--good:#e7eee7}
@@ -182,7 +182,55 @@ function specialExercise(name,d){
  return null;
 }
 function runWarmup(){return ['3–5 min brisk walk → easy jog','Ankle rocks × 10/side','Leg swings front/back × 10/side','Leg swings lateral × 10/side','Walking lunge + rotation × 5/side','Glute bridge × 10','Calf raise × 12–15','Marching knee drive × 10/side','A-march / A-skip × 15–20 m','2–3 × 15–20 sec progressive strides']}
-function runPrescription(d,s){let w=weekOf(d),c=Math.floor((w-1)/4),deload=wave(d)===4;if(s.run==='easy'){let m=Math.max(2.5,Math.min(4.5,3+c*.5-(deload?.5:0)));return m.toFixed(1)+' mi easy · conversational';}if(s.run==='tempo'){let mins=Math.max(10,Math.min(30,15+c*5-(deload?5:0)));return '10 min easy + '+mins+' min controlled tempo + 5–10 min easy';}if(s.run==='long'){let m=Math.max(3.5,Math.min(7,4.5+c*.5-(deload?.75:0)));return m.toFixed(1)+' mi easy · relaxed, even effort';}return''}
+const PREHYROX_RUN_PLAN={
+ '2026-09-22':{title:'Easy Run · 3 mi',pace:'10:45–11:30/mi',detail:'Conversational · RPE 3–4. Keep this truly easy.'},
+ '2026-09-24':{title:'4 × 1K Intervals',pace:'8:55–9:10/mi reps',detail:'1 mi easy warm-up · 4 × 1K · 2:00 easy recovery between reps · 0.5–1 mi easy cooldown. Controlled, not all-out.'},
+ '2026-09-26':{title:'Long Easy · 5 mi',pace:'10:45–11:45/mi',detail:'Conversational · RPE 3–4. Do not turn the final mile into tempo.'},
+ '2026-09-29':{title:'Easy Run · 3 mi',pace:'10:45–11:30/mi',detail:'Conversational · RPE 3–4. Keep this truly easy.'},
+ '2026-10-01':{title:'Tempo · 2.5 mi',pace:'9:30–9:50/mi tempo',detail:'1 mi easy warm-up + 2.5 mi tempo + 1 mi easy cooldown.'},
+ '2026-10-03':{title:'Long Easy · 6 mi',pace:'10:45–11:45/mi',detail:'Conversational · RPE 3–4. Do not turn the final mile into tempo.'},
+ '2026-10-06':{title:'Easy Run · 3.5 mi',pace:'10:45–11:30/mi',detail:'Conversational · RPE 3–4. Keep this truly easy.'},
+ '2026-10-08':{title:'5 × 1K Intervals',pace:'8:55–9:10/mi reps',detail:'1 mi easy warm-up · 5 × 1K · 2:00 easy recovery between reps · 0.5–1 mi easy cooldown. Controlled, not all-out.'},
+ '2026-10-10':{title:'Long Easy · 6.5 mi',pace:'10:45–11:45/mi',detail:'Conversational · RPE 3–4. Do not turn the final mile into tempo.'},
+ '2026-10-13':{title:'Easy Run · 3.5 mi',pace:'10:45–11:30/mi',detail:'Conversational · RPE 3–4. Keep this truly easy.'},
+ '2026-10-15':{title:'Tempo · 2.75 mi',pace:'9:30–9:50/mi tempo',detail:'1 mi easy warm-up + 2.75 mi tempo + ~1 mi easy cooldown.'},
+ '2026-10-17':{title:'Long Easy · 7 mi',pace:'10:45–11:45/mi',detail:'Conversational · RPE 3–4. Do not turn the final mile into tempo.'},
+ '2026-10-20':{title:'Easy Run · 3.5 mi',pace:'10:45–11:30/mi',detail:'Conversational · RPE 3–4. Keep this truly easy.'},
+ '2026-10-22':{title:'5 × 1K Intervals',pace:'8:55–9:10/mi reps',detail:'1 mi easy warm-up · 5 × 1K · 2:00 easy recovery between reps · 0.5–1 mi easy cooldown. Controlled, not all-out.'},
+ '2026-10-24':{title:'Long Easy · 5.5 mi',pace:'10:45–11:45/mi',detail:'Conversational · RPE 3–4. Do not turn the final mile into tempo.'},
+ '2026-10-27':{title:'Easy Run · 3.5 mi',pace:'10:45–11:30/mi',detail:'Conversational · RPE 3–4. Keep this truly easy.'},
+ '2026-10-29':{title:'Tempo · 3 mi',pace:'9:30–9:50/mi tempo',detail:'1 mi easy warm-up + 3 mi tempo + 1 mi easy cooldown.'},
+ '2026-10-31':{title:'Long Easy · 7 mi',pace:'10:45–11:45/mi',detail:'Conversational · RPE 3–4. Do not turn the final mile into tempo.'},
+ '2026-11-03':{title:'Easy Run · 3.5 mi',pace:'10:45–11:30/mi',detail:'Conversational · RPE 3–4. Keep this truly easy.'},
+ '2026-11-05':{title:'6 × 1K Intervals',pace:'8:55–9:10/mi reps',detail:'1 mi easy warm-up · 6 × 1K · 2:00 easy recovery between reps · 0.5–1 mi easy cooldown. Controlled, not all-out.'},
+ '2026-11-07':{title:'Long Easy · 7.5 mi',pace:'10:45–11:45/mi',detail:'Conversational · RPE 3–4. Do not turn the final mile into tempo.'},
+ '2026-11-10':{title:'Easy Run · 4 mi',pace:'10:45–11:30/mi',detail:'Conversational · RPE 3–4. Keep this truly easy.'},
+ '2026-11-12':{title:'Tempo · 3.25 mi',pace:'9:30–9:50/mi tempo',detail:'1 mi easy warm-up + 3.25 mi tempo + ~1 mi easy cooldown.'},
+ '2026-11-14':{title:'Long Easy · 8 mi',pace:'10:45–11:45/mi',detail:'Conversational · RPE 3–4. Do not turn the final mile into tempo.'},
+ '2026-11-17':{title:'Easy Run · 4 mi',pace:'10:45–11:30/mi',detail:'Conversational · RPE 3–4. Keep this truly easy.'},
+ '2026-11-19':{title:'6 × 1K Intervals',pace:'8:55–9:10/mi reps',detail:'1 mi easy warm-up · 6 × 1K · 2:00 easy recovery between reps · 0.5–1 mi easy cooldown. Controlled, not all-out.'},
+ '2026-11-21':{title:'Long Easy · 6 mi',pace:'10:45–11:45/mi',detail:'Conversational · RPE 3–4. Do not turn the final mile into tempo.'},
+ '2026-11-24':{title:'Easy Run · 4 mi',pace:'10:45–11:30/mi',detail:'Conversational · RPE 3–4. Keep this truly easy.'},
+ '2026-11-26':{title:'Tempo · 3.5 mi',pace:'9:30–9:50/mi tempo',detail:'1 mi easy warm-up + 3.5 mi tempo + 1 mi easy cooldown.'},
+ '2026-11-28':{title:'Long Easy · 7.5 mi',pace:'10:45–11:45/mi',detail:'Conversational · RPE 3–4. Do not turn the final mile into tempo.'},
+ '2026-12-01':{title:'Easy Run · 4 mi',pace:'10:45–11:30/mi',detail:'Conversational · RPE 3–4. Keep this truly easy.'},
+ '2026-12-03':{title:'6 × 1K Intervals',pace:'8:55–9:10/mi reps',detail:'1 mi easy warm-up · 6 × 1K · 2:00 easy recovery between reps · 0.5–1 mi easy cooldown. Controlled, not all-out.'},
+ '2026-12-05':{title:'Long Easy · 8 mi',pace:'10:45–11:45/mi',detail:'Conversational · RPE 3–4. Do not turn the final mile into tempo.'},
+ '2026-12-08':{title:'Easy Run · 4 mi',pace:'10:45–11:30/mi',detail:'Conversational · RPE 3–4. Keep this truly easy.'},
+ '2026-12-10':{title:'Tempo · 3.5 mi',pace:'9:30–9:50/mi tempo',detail:'1 mi easy warm-up + 3.5 mi tempo + 1 mi easy cooldown.'},
+ '2026-12-12':{title:'Long Easy · 6.5 mi',pace:'10:45–11:45/mi',detail:'Conversational · RPE 3–4. Do not turn the final mile into tempo.'},
+ '2026-12-15':{title:'Easy Run · 4 mi',pace:'10:45–11:30/mi',detail:'Conversational · RPE 3–4. Keep this truly easy.'},
+ '2026-12-17':{title:'6 × 1K Intervals',pace:'8:55–9:10/mi reps',detail:'1 mi easy warm-up · 6 × 1K · 2:00 easy recovery between reps · 0.5–1 mi easy cooldown. Controlled, not all-out.'},
+ '2026-12-19':{title:'Long Easy · 7 mi',pace:'10:45–11:45/mi',detail:'Conversational · RPE 3–4. Do not turn the final mile into tempo.'}
+};
+function runPlan(d,s){
+ let p=PREHYROX_RUN_PLAN[iso(d)];
+ if(p)return p;
+ let text=runPrescriptionFallback(d,s);
+ return {title:text,pace:'',detail:''};
+}
+function runPrescription(d,s){let p=runPlan(d,s);return p.pace?`${p.title} · ${p.pace}`:p.title}
+function runPrescriptionFallback(d,s){let w=weekOf(d),c=Math.floor((w-1)/4),deload=wave(d)===4;if(s.run==='easy'){let m=Math.max(2.5,Math.min(4.5,3+c*.5-(deload?.5:0)));return m.toFixed(1)+' mi easy · conversational';}if(s.run==='tempo'){return (deload?'1 mi easy + 3 × 1K controlled + easy recovery between reps + easy cooldown':'1 mi easy + 4 × 1K controlled + easy recovery between reps + easy cooldown');}if(s.run==='long'){let m=Math.max(3.5,Math.min(7,4.5+c*.5-(deload?.75:0)));return m.toFixed(1)+' mi easy · relaxed, even effort';}return''}
 function fmt(d){return d.toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'})} function hist(){try{return JSON.parse(localStorage.forgeHistory||'[]')}catch(e){return[]}} function key(d,id){return iso(d)+'__'+id}
 function entryKey(x){return x.key||x.date+'__'+(x.sessionId||'legacy')} function completed(d,id){return hist().some(x=>entryKey(x)===key(d,id))}
 function mode(){return localStorage.wilesMode||localStorage.forgeMode||'Home Gym'} function weekDates(base){return Array.from({length:7},(_,i)=>{let d=new Date(base);d.setDate(d.getDate()+i);return d})}
@@ -275,7 +323,7 @@ function openWorkout(ds,id,from){closeSubs();activeDate=parseDate(ds);activeSess
  let out=s.run?prepSection('RUN WARM-UP',runWarmup(),oldPrep):prepSection('WARM-UP',s.warm||[],oldPrep);if(s.run)out+=`<div class="note warn"><b>Readiness check</b><div class="small">Progress walk → jog → drills → strides only if movement feels normal and stable. Stop if instability, radiating symptoms, or meaningful pain returns.</div></div>`;out+=prepSection('ATHLETIC PRIMER',s.primer||[],oldPrep);
  if((s.ex||[]).length)out+='<div class="sectionlabel"><b>STRENGTH + HYPERTROPHY</b></div>';
  (s.ex||[]).forEach((e,idx)=>{if(idx===0&&s.preMain)out+=prepSection('LIFT-SPECIFIC WARM-UP',s.preMain,oldPrep);let n=setsFor(e[1],activeDate),type=e[2]||'secondary',sp=specialExercise(e[0],activeDate),range=sp?sp.reps:exReps(type,activeDate),olds=oldSets.filter(x=>x.exercise===e[0]);out+=`<div class="exercise" data-ex="${e[0]}" data-type="${type}"><div class="exhead"><div><h3>${e[0]}</h3><div class="small">${n} × ${range} · ${rir(activeDate)} RIR · Previous: ${previous(e[0],activeDate)}</div>${sp?`<div class="skillwhy">${sp.note}</div>`:''}<div class="suggest">${suggested(e[0],activeDate,type)}</div></div><button class="mini" onclick="openSubs('${e[0].replace(/'/g,"\\'")}')">SWAP</button></div><div class="sethead"><span>SET</span><span>LB</span><span>REPS</span><span>RIR</span><span>DONE</span></div>`;for(let i=0;i<n;i++){let o=olds[i]||{};out+=`<div class="setrow"><b>${i+1}</b><input data-w inputmode="decimal" value="${o.weight||''}"><input data-r inputmode="numeric" value="${o.reps||''}"><input data-rir inputmode="numeric" value="${o.rir??''}"><button class="check ${o.done?'done':''}" onclick="toggleSet(this)">${o.done?'✓':''}</button></div>`}out+='</div>'});
- if(s.run){let r=old?.run||{};out+=`<div class="sectionlabel"><b>RUN</b></div><div class="exercise"><h3>${runPrescription(activeDate,s)}</h3><div class="runfields"><input id="runDist" inputmode="decimal" placeholder="Distance (mi)" value="${r.distance||''}"><input id="runTime" placeholder="Time" value="${r.time||''}"><input id="runHr" inputmode="numeric" placeholder="Avg HR" value="${r.hr||''}"><input id="runRpe" inputmode="numeric" placeholder="RPE" value="${r.rpe||''}"><textarea id="runNotes" placeholder="Notes">${r.notes||''}</textarea></div></div>`}
+ if(s.run){let r=old?.run||{},rp=runPlan(activeDate,s);out+=`<div class="sectionlabel"><b>RUN</b></div><div class="exercise"><h3>${rp.title}</h3>${rp.pace?`<div class="pill" style="margin-top:8px">TARGET ${rp.pace}</div>`:''}${rp.detail?`<div class="note small">${rp.detail}</div>`:''}<div class="runfields"><input id="runDist" inputmode="decimal" placeholder="Distance (mi)" value="${r.distance||''}"><input id="runTime" placeholder="Time" value="${r.time||''}"><input id="runHr" inputmode="numeric" placeholder="Avg HR" value="${r.hr||''}"><input id="runRpe" inputmode="numeric" placeholder="RPE" value="${r.rpe||''}"><textarea id="runNotes" placeholder="Notes">${r.notes||''}</textarea></div></div>`}
  let hs=hyroxSkill(activeDate,s);if(hs){let done=oldPrep.includes('HYROX-0'),he=old?.hyrox||{};out+=`<div class="sectionlabel"><b>HYROX SKILL</b></div><div class="skillcard"><h3>${hs.title}</h3><div class="prepitem"><button class="prepcheck ${done?'done':''}" data-prep="HYROX-0" onclick="togglePrep(this)">${done?'✓':''}</button><div><b>${hs.work}</b><div class="skillwhy">${hs.detail}</div></div></div>${hs.kind==='erg'?`<div class="runfields"><input id="ergPace" placeholder="Avg pace /500m" value="${he.pace||''}"><input id="ergTime" placeholder="Total erg time" value="${he.time||''}"><input id="ergSpm" inputmode="numeric" placeholder="${hs.erg==='row'?'Avg SPM':'Stroke rate (opt.)'}" value="${he.spm||''}"><input id="ergRpe" inputmode="numeric" placeholder="Erg RPE" value="${he.rpe||''}"></div><div class="small" style="margin-top:8px">Log the erg portion only. WILES will use this to build your ${hs.erg==='ski'?'SkiErg':'RowErg'} pace history.</div>`:''}</div>`}if(s.rest)out='<div class="empty"><b>Recovery day</b><div class="small" style="margin-top:5px">No workout to log today.</div></div>';document.getElementById('exerciseList').innerHTML=out;workoutBaseHTML=out;renderWorkoutEnvironment();renderSmartImport();applyEnvironment();setTimeout(async()=>{let imp=JSON.parse(localStorage.getItem('wilesImport_'+key(activeDate,activeSession.id))||'{}');if(document.getElementById('importDistance'))document.getElementById('importDistance').value=imp.distance||'';if(document.getElementById('importTime'))document.getElementById('importTime').value=imp.time||'';if(document.getElementById('importHr'))document.getElementById('importHr').value=imp.hr||'';if(document.getElementById('importPace'))document.getElementById('importPace').value=imp.pace||'';await renderSavedPhotos()},0);window.scrollTo(0,0)}
 function backFromWorkout(){stopTimer();document.getElementById('workout').classList.add('hidden');showTab(returnTab)}
 function updateProgress(){let all=[...document.querySelectorAll('#exerciseList .check')],done=all.filter(x=>x.classList.contains('done')).length;document.getElementById('workoutCount').textContent=all.length?done+' / '+all.length+' sets':'';document.getElementById('workoutBar').style.width=(all.length?done/all.length*100:0)+'%'} function toggleSet(b){b.classList.toggle('done');b.textContent=b.classList.contains('done')?'✓':'';updateProgress();if(b.classList.contains('done'))startTimer(90)}
