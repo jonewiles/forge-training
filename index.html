@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#f5f4ef">
-<meta name="wiles-version" content="4.5">
+<meta name="wiles-version" content="5.0">
 <title>WILES</title>
 <style>
 :root{--bg:#f5f4ef;--card:#fff;--ink:#111;--muted:#73736e;--line:#deddd7;--soft:#ebeae4;--good:#e7eee7}
@@ -144,13 +144,13 @@ const supa=window.supabase?window.supabase.createClient(SUPABASE_URL,SUPABASE_PU
 }):null;
 const START=new Date(2026,8,21),HYROX=new Date(2026,11,21);
 const sessions={
-1:[{id:'push',name:'Push + Power',sub:'Chest · shoulders · triceps · power',warm:['3–4 min easy Assault Bike','Band pull-aparts × 15','Scap push-ups × 10','Arm circles × 10/side'],primer:['Explosive push-up · 3 × 3–5 · full recovery'],preMain:['2–3 progressive bench warm-up sets'],ex:[['Barbell Bench Press',4,'main'],['Incline DB Press',3,'secondary'],['Seated DB Shoulder Press',3,'secondary'],['Cable / Machine Fly',3,'accessory'],['Lateral Raise',3,'accessory'],['Triceps Pressdown',3,'accessory'],['Overhead Triceps Extension',2,'accessory'],['Cable Crunch',3,'accessory']],skillType:'ski-wall'}],
-2:[{id:'easy-run',name:'Easy Run',sub:'AM · aerobic base',run:'easy'},{id:'pull',name:'Pull + Carries',sub:'PM · back · biceps · carry strength',warm:['3–4 min easy SkiErg or bike','Band pull-aparts × 15','Scap pull / pulldown × 10','Thoracic rotation × 6/side'],primer:[],ex:[['Pull-up / Lat Pulldown',4,'main'],['Chest-Supported Row',4,'secondary'],['Single-Arm Cable Row',3,'secondary'],['Rear-Delt Fly',3,'accessory'],['Incline DB Curl',3,'accessory'],['Hammer Curl',2,'accessory'],['Hanging Leg Raise',3,'accessory']],}],
-3:[{id:'legs',name:'Legs + Athletic',sub:'Lower strength · power · durability',warm:['4 min easy bike','Ankle rocks × 10/side','90/90 hip switches × 8/side','Glute bridge × 10','Walking lunge + rotation × 5/side','Bodyweight squat × 10'],primer:['Box jump · 3 × 3 · crisp landings · full recovery'],preMain:['2–4 progressive squat warm-up sets'],ex:[['Back Squat',4,'main'],['Romanian Deadlift',3,'main'],['Loaded Walking Lunge',3,'secondary'],['Leg Curl',3,'accessory'],['Leg Extension',2,'accessory'],['Standing Calf Raise',3,'accessory'],['Tibialis Raise',2,'accessory'],['Hyperextension',2,'accessory']],skillType:'carry'}],
-4:[{id:'tempo-run',name:'Tempo Run',sub:'AM · quality running',run:'tempo'},{id:'shoulders-arms',name:'Shoulders + Arms',sub:'PM · hypertrophy · HYROX skill',warm:['3–4 min easy bike','Band pull-aparts × 15','Arm circles × 10/side','Scap push-ups × 10'],primer:[],ex:[['Seated DB Shoulder Press',3,'secondary'],['Cable Lateral Raise',3,'accessory'],['Rear-Delt Fly',3,'accessory'],['EZ-Bar Curl',3,'accessory'],['Cable Curl',2,'accessory'],['Cable / Skullcrusher Extension',3,'accessory'],['Rope Pressdown',2,'accessory'],['Weighted Side Bend',3,'accessory']],}],
-5:[{id:'upper',name:'Upper + HYROX Skill',sub:'Upper hypertrophy · SkiErg · athletic work',warm:['4 min easy SkiErg','Band pull-aparts × 15','Scap pull / pulldown × 10','Push-up × 8','Thoracic rotation × 6/side'],primer:['KB Swing · 3 × 8 · explosive hip extension'],ex:[['Incline Bench Press',3,'main'],['Pull-up / Lat Pulldown',3,'main'],['Flat DB Press',3,'secondary'],['Seated Cable Row',3,'secondary'],['Pec Deck',2,'accessory'],['Straight-Arm Pulldown',2,'accessory'],['Lateral Raise',3,'accessory'],['Biceps',2,'accessory'],['Triceps',2,'accessory'],['Jackknife / V-Up',3,'accessory']],skillType:'row-bbj'}],
-6:[{id:'long-run',name:'Long Easy Run',sub:'Aerobic durability · relaxed mechanics',run:'long'}],
-0:[{id:'rest',name:'Rest',sub:'Recovery',rest:true}]
+1:[{id:'push',name:'Push + Power',sub:'Strength · hypertrophy · mixed conditioning',warm:['3–4 min easy Assault Bike','Band pull-aparts × 15','Scap push-ups × 10','Arm circles × 10/side'],primer:['Explosive push-up · 3 × 3–5 · full recovery'],preMain:['2–3 progressive bench warm-up sets'],ex:[['Barbell Bench Press',4,'main'],['Incline DB Press',3,'secondary'],['Seated DB Shoulder Press',3,'secondary'],['Cable / Machine Fly',3,'accessory'],['Lateral Raise',3,'accessory'],['Triceps Pressdown',3,'accessory'],['Overhead Triceps Extension',2,'accessory']],superset:['Lateral Raise','Triceps Pressdown'],skillType:'hybrid-mon'}],
+2:[{id:'easy-run',name:'Easy Run',sub:'AM · aerobic base',run:'easy'},{id:'pull',name:'Pull + Core',sub:'PM · back · biceps · trunk',warm:['3–4 min easy SkiErg or bike','Band pull-aparts × 15','Scap pull / pulldown × 10','Thoracic rotation × 6/side'],primer:[],ex:[['Pull-up / Lat Pulldown',4,'main'],['Chest-Supported Row',4,'secondary'],['Single-Arm Cable Row',3,'secondary'],['Rear-Delt Fly',3,'accessory'],['Incline DB Curl',3,'accessory'],['Hammer Curl',2,'accessory'],['Hanging Leg Raise',3,'accessory']],superset:['Rear-Delt Fly','Incline DB Curl']}],
+3:[{id:'legs',name:'Functional Legs',sub:'Strength · hypertrophy · carries · lunges',warm:['4 min easy bike','Ankle rocks × 10/side','90/90 hip switches × 8/side','Glute bridge × 10','Walking lunge + rotation × 5/side','Bodyweight squat × 10'],primer:['Box jump · 3 × 3 · crisp landings · full recovery'],preMain:['2–4 progressive squat warm-up sets'],ex:[['Back Squat',4,'main'],['Romanian Deadlift',3,'main'],['Loaded Walking Lunge',3,'secondary'],['Leg Curl',3,'accessory'],['Leg Extension',2,'accessory'],['Standing Calf Raise',3,'accessory'],['Tibialis Raise',2,'accessory'],['Hyperextension',2,'accessory']],superset:['Leg Curl','Standing Calf Raise'],skillType:'hybrid-wed'}],
+4:[{id:'tempo-run',name:'Engine + Shoulders / Arms',sub:'Machine threshold · delts · arms · core',warm:['4 min easy on today’s machine','Band pull-aparts × 15','Arm circles × 10/side','Scap push-ups × 10'],primer:[],ex:[['Seated DB Shoulder Press',3,'secondary'],['Cable Lateral Raise',3,'accessory'],['Rear-Delt Fly',3,'accessory'],['EZ-Bar Curl',3,'accessory'],['Cable Curl',2,'accessory'],['Cable / Skullcrusher Extension',3,'accessory'],['Rope Pressdown',2,'accessory'],['Cable Crunch',3,'accessory']],superset:['Cable Curl','Rope Pressdown'],skillType:'engine'}],
+5:[{id:'upper',name:'Upper Hybrid',sub:'Upper hypertrophy · functional conditioning',warm:['3–4 min easy RowErg','Band pull-aparts × 15','Scap push-ups × 10','Thoracic rotation × 6/side'],primer:[],preMain:['2–3 progressive incline bench warm-up sets'],ex:[['Incline Bench Press',3,'main'],['Pull-up / Lat Pulldown',3,'secondary'],['Flat DB Press',3,'secondary'],['Seated Cable Row',3,'secondary'],['Pec Deck',2,'accessory'],['Straight-Arm Pulldown',2,'accessory'],['Lateral Raise',3,'accessory'],['DB Curl',2,'accessory'],['Triceps Pressdown',2,'accessory']],superset:['Lateral Raise','DB Curl'],skillType:'hybrid-fri'}],
+6:[{id:'long-run',name:'Long Easy Run + Core',sub:'Aerobic durability · trunk stability',run:'long',skillType:'core-sat'}],
+0:[{id:'rest',name:'Full Rest',sub:'Recover · eat · sleep',rest:true}]
 };
 const subs={'Barbell Bench Press':['DB Bench Press','Machine Chest Press','Push-Up'],'Incline DB Press':['Incline Machine Press','DB Floor Press'],'Seated DB Shoulder Press':['Machine Shoulder Press','Standing DB Press','Landmine Press'],'Pull-up / Lat Pulldown':['Assisted Pull-Up','Band Pulldown','1-Arm DB Row'],'Chest-Supported Row':['Seated Cable Row','1-Arm DB Row','Machine Row'],'Back Squat':['Goblet Squat','DB Front Squat','Leg Press'],'Romanian Deadlift':['DB Romanian Deadlift','Single-Leg RDL','Cable Pull-Through'],'Bulgarian Split Squat':['Reverse Lunge','Walking Lunge','Step-Up'],'Loaded Walking Lunge':['20 kg Sandbag Walking Lunge','DB Walking Lunge','Reverse Lunge'],'Leg Curl':['Slider Leg Curl','Stability-Ball Curl'],'Leg Extension':['Spanish Squat','Reverse Nordic'],'Standing Calf Raise':['DB Calf Raise','Single-Leg Calf Raise'],'Cable / Machine Fly':['DB Fly','Push-Up'],'Lateral Raise':['DB Lateral Raise','Cable Lateral Raise'],'Cable Lateral Raise':['DB Lateral Raise','Lean-Away Lateral Raise'],'Triceps Pressdown':['DB Skullcrusher','Close-Grip Push-Up'],'Overhead Triceps Extension':['DB Overhead Extension','Skullcrusher'],'Rear-Delt Fly':['DB Rear-Delt Fly','Band Pull-Apart'],'Incline DB Curl':['Standing DB Curl','Hammer Curl'],'Hammer Curl':['DB Curl','Cross-Body Hammer Curl'],'EZ-Bar Curl':['DB Curl','Cable Curl'],'Cable Curl':['DB Curl','Hammer Curl'],'Cable / Skullcrusher Extension':['DB Skullcrusher','Overhead DB Extension'],'Rope Pressdown':['Close-Grip Push-Up','DB Triceps Extension'],'Incline Bench Press':['Incline DB Press','Incline Machine Press'],'Flat DB Press':['Push-Up','Machine Chest Press'],'Seated Cable Row':['1-Arm DB Row','Chest-Supported DB Row'],'Pec Deck':['DB Fly','Push-Up'],'Straight-Arm Pulldown':['DB Pullover','Band Pulldown'],'Biceps':['DB Curl','Hammer Curl'],'Triceps':['DB Skullcrusher','Close-Grip Push-Up'],'Cable Crunch':['Kneeling Band Crunch','Machine Crunch'],'Hanging Leg Raise':['Hanging Knee Raise','Toes-to-Bar'],'Hyperextension':['45° Back Extension','Bodyweight Hip Extension'],'Weighted Side Bend':['Suitcase Hold','Cable Side Bend'],'Jackknife / V-Up':['V-Up','Jackknife','Dead Bug']};
 let today=strip(new Date()),programOffset=0,activeDate=null,activeSession=null,returnTab='today',restSeconds=0,restInterval=null,subTarget=null;
@@ -159,123 +159,14 @@ function monday(d){let x=strip(d),n=x.getDay();x.setDate(x.getDate()-(n===0?6:n-
 function rir(d){return wave(d)===4?'3–4':'1–3'} function setsFor(n,d){return wave(d)===4?Math.max(2,Math.ceil(n*.55)):n}
 function exReps(type,d){let w=wave(d);if(type==='main')return w===1?'8–10':w===2?'6–8':w===3?'5–7':'6–8';if(type==='secondary')return w===1?'10–12':w===2?'8–10':w===3?'6–8':'8–10';return w===3?'10–15':'12–15'}
 function hyroxSkill(d,s){
- let c=Math.min(2,Math.floor((weekOf(d)-1)/4)),dl=wave(d)===4;
- if(s.skillType==='ski-wall'){
-   let ski=[250,300,333][c],wb=[10,12,15][c],r=dl?2:3;
-   return {kind:'erg',erg:'ski',title:'SkiErg + Wall Balls',work:`${r} rounds · ${ski} m SkiErg + ${wb} Wall Balls`,detail:'Damper 3. Ski at controlled HYROX effort (RPE 6–7). Use 14 lb / 6 kg wall ball to 3.0 m / ~10 ft target. Smooth transitions; do not sprint the Ski.'};
- }
- if(s.skillType==='carry'){
-   let seg=[30,40,50][c],sets=dl?2:4;
-   return {kind:'simple',title:'Farmers Carry — Men Open race load',work:`${sets} × ${seg} m · 2 × 24 kg (53 lb each)`,detail:'Walk fast with race load, tall posture and controlled turns. Full enough recovery to keep grip and posture crisp. Final pre-HYROX build reaches the full 200 m race distance.'};
- }
- if(s.skillType==='row-bbj'){
-   let row=[250,300,333][c],bbj=[10,15,20][c],r=dl?2:3;
-   return {kind:'erg',erg:'row',title:'RowErg + Burpee Broad Jump',work:`${r} rounds · ${row} m Row + ${bbj} m BBJ`,detail:'Row damper 4, RPE 6–7, roughly 24–28 spm. Use strong leg drive and relaxed recovery. BBJs are chest-to-floor with efficient two-foot jumps. Build quality first; race demands are 1,000 m Row and 80 m BBJ.'};
- }
- return null;
+ let deload=wave(d)===4,w=weekOf(d),rot=(w-1)%3;
+ if(s.skillType==='hybrid-mon')return deload?{title:'Mixed Conditioning · Deload',work:'2 rounds for quality · 250m Ski + 10 Wall Balls + 8 DB Push Press',detail:'Smooth technique · RPE 6.',kind:'erg',erg:'ski'}:{title:'12 MIN AMRAP',work:'250m Ski + 10 Wall Balls + 8 DB Push Press + 10–12 cal Assault Bike',detail:'Steady hard effort. Maintain output for all 12 minutes.',kind:'erg',erg:'ski'};
+ if(s.skillType==='hybrid-wed')return deload?{title:'Functional Lower · Deload',work:'2 rounds · 20m Farmers Carry + 10m Sandbag Walking Lunge',detail:'Race-load technique. Move cleanly, not for time.',kind:'simple'}:{title:'EVERY 3:00 × 4',work:'40m Farmers Carry + 20m Sandbag Walking Lunge + 5 Box Jumps',detail:'Race-load carries · 20kg/44lb sandbag. Crisp jumps only if movement is pain-free and stable.',kind:'simple'};
+ if(s.skillType==='engine'){let o=[{title:'ASSAULT BIKE THRESHOLD',work:deload?'25–30 min easy Zone 2':'5 × 4:00 hard / 2:00 easy',detail:deload?'Easy aerobic reset.':'RPE 7–8 · repeatable output.',erg:'bike'},{title:'SKIERG THRESHOLD',work:deload?'25–30 min easy Zone 2':'5 × 1,000m / 2:00 easy',detail:deload?'Easy aerobic reset.':'Controlled-hard · consistent splits · RPE 7–8.',erg:'ski'},{title:'ROWERG THRESHOLD',work:deload?'25–30 min easy Zone 2':'4 × 1,250m / 2:00–2:30 easy',detail:deload?'Easy aerobic reset.':'Controlled-hard · consistent splits · RPE 7–8.',erg:'row'}][rot];return{title:o.title,work:o.work,detail:o.detail,kind:o.erg==='bike'?'simple':'erg',erg:o.erg}}
+ if(s.skillType==='hybrid-fri'){if(deload)return{title:'Upper Hybrid · Deload',work:'8 min quality · 8 cal Row + 6 Burpee Broad Jumps + 8 alternating DB Snatches',detail:'Smooth movement. No redline.',kind:'erg',erg:'row'};let o=[{title:'10 MIN EMOM',work:'Min 1: 12 cal Row · Min 2: 8 Burpee Broad Jumps + 8 alternating DB Snatches',detail:'5 rounds · crisp work.',erg:'row'},{title:'4 ROUNDS FOR QUALITY',work:'250m Row + 8 Burpee Broad Jumps + 10 DB Hang Cleans',detail:'Rest as needed to preserve quality.',erg:'row'},{title:'12 MIN AMRAP',work:'200m Row + 6 Burpee Broad Jumps + 10 DB Front Rack Step-Ups',detail:'Sustainable hard pace.',erg:'row'}][rot];return{title:o.title,work:o.work,detail:o.detail,kind:'erg',erg:o.erg}}
+ if(s.skillType==='core-sat')return{title:'CORE · 8 MIN',work:'3 rounds · Pallof Press 10/side + Dead Bug 8/side',detail:'Controlled trunk work after the run.',kind:'simple'};
+ return null
 }
-function specialExercise(name,d){
- if(name==='Loaded Walking Lunge'){
-   let c=Math.min(2,Math.floor((weekOf(d)-1)/4)),dl=wave(d)===4,steps=[10,10,12][c];
-   return {reps:`${steps}/leg`,note:`Preferred: 20 kg / 44 lb sandbag across shoulders. If unavailable, use dumbbells totaling about 40–50 lb. Alternate legs; back knee touches floor; stand fully each rep.${dl?' Keep this easy during deload.':''}`};
- }
- return null;
-}
-function runWarmup(){return ['3–5 min brisk walk → easy jog','Ankle rocks × 10/side','Leg swings front/back × 10/side','Leg swings lateral × 10/side','Walking lunge + rotation × 5/side','Glute bridge × 10','Calf raise × 12–15','Marching knee drive × 10/side','A-march / A-skip × 15–20 m','2–3 × 15–20 sec progressive strides']}
-const PREHYROX_RUN_PLAN={
- '2026-09-22':{title:'Easy Run · 3 mi',pace:'10:45–11:30/mi',detail:'Conversational · RPE 3–4. Keep this truly easy.'},
- '2026-09-24':{title:'4 × 1K Intervals',pace:'8:55–9:10/mi reps',detail:'1 mi easy warm-up · 4 × 1K · 2:00 easy recovery between reps · 0.5–1 mi easy cooldown. Controlled, not all-out.'},
- '2026-09-26':{title:'Long Easy · 5 mi',pace:'10:45–11:45/mi',detail:'Conversational · RPE 3–4. Do not turn the final mile into tempo.'},
- '2026-09-29':{title:'Easy Run · 3 mi',pace:'10:45–11:30/mi',detail:'Conversational · RPE 3–4. Keep this truly easy.'},
- '2026-10-01':{title:'Tempo · 2.5 mi',pace:'9:30–9:50/mi tempo',detail:'1 mi easy warm-up + 2.5 mi tempo + 1 mi easy cooldown.'},
- '2026-10-03':{title:'Long Easy · 6 mi',pace:'10:45–11:45/mi',detail:'Conversational · RPE 3–4. Do not turn the final mile into tempo.'},
- '2026-10-06':{title:'Easy Run · 3.5 mi',pace:'10:45–11:30/mi',detail:'Conversational · RPE 3–4. Keep this truly easy.'},
- '2026-10-08':{title:'5 × 1K Intervals',pace:'8:55–9:10/mi reps',detail:'1 mi easy warm-up · 5 × 1K · 2:00 easy recovery between reps · 0.5–1 mi easy cooldown. Controlled, not all-out.'},
- '2026-10-10':{title:'Long Easy · 6.5 mi',pace:'10:45–11:45/mi',detail:'Conversational · RPE 3–4. Do not turn the final mile into tempo.'},
- '2026-10-13':{title:'Easy Run · 3.5 mi',pace:'10:45–11:30/mi',detail:'Conversational · RPE 3–4. Keep this truly easy.'},
- '2026-10-15':{title:'Tempo · 2.75 mi',pace:'9:30–9:50/mi tempo',detail:'1 mi easy warm-up + 2.75 mi tempo + ~1 mi easy cooldown.'},
- '2026-10-17':{title:'Long Easy · 7 mi',pace:'10:45–11:45/mi',detail:'Conversational · RPE 3–4. Do not turn the final mile into tempo.'},
- '2026-10-20':{title:'Easy Run · 3.5 mi',pace:'10:45–11:30/mi',detail:'Conversational · RPE 3–4. Keep this truly easy.'},
- '2026-10-22':{title:'5 × 1K Intervals',pace:'8:55–9:10/mi reps',detail:'1 mi easy warm-up · 5 × 1K · 2:00 easy recovery between reps · 0.5–1 mi easy cooldown. Controlled, not all-out.'},
- '2026-10-24':{title:'Long Easy · 5.5 mi',pace:'10:45–11:45/mi',detail:'Conversational · RPE 3–4. Do not turn the final mile into tempo.'},
- '2026-10-27':{title:'Easy Run · 3.5 mi',pace:'10:45–11:30/mi',detail:'Conversational · RPE 3–4. Keep this truly easy.'},
- '2026-10-29':{title:'Tempo · 3 mi',pace:'9:30–9:50/mi tempo',detail:'1 mi easy warm-up + 3 mi tempo + 1 mi easy cooldown.'},
- '2026-10-31':{title:'Long Easy · 7 mi',pace:'10:45–11:45/mi',detail:'Conversational · RPE 3–4. Do not turn the final mile into tempo.'},
- '2026-11-03':{title:'Easy Run · 3.5 mi',pace:'10:45–11:30/mi',detail:'Conversational · RPE 3–4. Keep this truly easy.'},
- '2026-11-05':{title:'6 × 1K Intervals',pace:'8:55–9:10/mi reps',detail:'1 mi easy warm-up · 6 × 1K · 2:00 easy recovery between reps · 0.5–1 mi easy cooldown. Controlled, not all-out.'},
- '2026-11-07':{title:'Long Easy · 7.5 mi',pace:'10:45–11:45/mi',detail:'Conversational · RPE 3–4. Do not turn the final mile into tempo.'},
- '2026-11-10':{title:'Easy Run · 4 mi',pace:'10:45–11:30/mi',detail:'Conversational · RPE 3–4. Keep this truly easy.'},
- '2026-11-12':{title:'Tempo · 3.25 mi',pace:'9:30–9:50/mi tempo',detail:'1 mi easy warm-up + 3.25 mi tempo + ~1 mi easy cooldown.'},
- '2026-11-14':{title:'Long Easy · 8 mi',pace:'10:45–11:45/mi',detail:'Conversational · RPE 3–4. Do not turn the final mile into tempo.'},
- '2026-11-17':{title:'Easy Run · 4 mi',pace:'10:45–11:30/mi',detail:'Conversational · RPE 3–4. Keep this truly easy.'},
- '2026-11-19':{title:'6 × 1K Intervals',pace:'8:55–9:10/mi reps',detail:'1 mi easy warm-up · 6 × 1K · 2:00 easy recovery between reps · 0.5–1 mi easy cooldown. Controlled, not all-out.'},
- '2026-11-21':{title:'Long Easy · 6 mi',pace:'10:45–11:45/mi',detail:'Conversational · RPE 3–4. Do not turn the final mile into tempo.'},
- '2026-11-24':{title:'Easy Run · 4 mi',pace:'10:45–11:30/mi',detail:'Conversational · RPE 3–4. Keep this truly easy.'},
- '2026-11-26':{title:'Tempo · 3.5 mi',pace:'9:30–9:50/mi tempo',detail:'1 mi easy warm-up + 3.5 mi tempo + 1 mi easy cooldown.'},
- '2026-11-28':{title:'Long Easy · 7.5 mi',pace:'10:45–11:45/mi',detail:'Conversational · RPE 3–4. Do not turn the final mile into tempo.'},
- '2026-12-01':{title:'Easy Run · 4 mi',pace:'10:45–11:30/mi',detail:'Conversational · RPE 3–4. Keep this truly easy.'},
- '2026-12-03':{title:'6 × 1K Intervals',pace:'8:55–9:10/mi reps',detail:'1 mi easy warm-up · 6 × 1K · 2:00 easy recovery between reps · 0.5–1 mi easy cooldown. Controlled, not all-out.'},
- '2026-12-05':{title:'Long Easy · 8 mi',pace:'10:45–11:45/mi',detail:'Conversational · RPE 3–4. Do not turn the final mile into tempo.'},
- '2026-12-08':{title:'Easy Run · 4 mi',pace:'10:45–11:30/mi',detail:'Conversational · RPE 3–4. Keep this truly easy.'},
- '2026-12-10':{title:'Tempo · 3.5 mi',pace:'9:30–9:50/mi tempo',detail:'1 mi easy warm-up + 3.5 mi tempo + 1 mi easy cooldown.'},
- '2026-12-12':{title:'Long Easy · 6.5 mi',pace:'10:45–11:45/mi',detail:'Conversational · RPE 3–4. Do not turn the final mile into tempo.'},
- '2026-12-15':{title:'Easy Run · 4 mi',pace:'10:45–11:30/mi',detail:'Conversational · RPE 3–4. Keep this truly easy.'},
- '2026-12-17':{title:'6 × 1K Intervals',pace:'8:55–9:10/mi reps',detail:'1 mi easy warm-up · 6 × 1K · 2:00 easy recovery between reps · 0.5–1 mi easy cooldown. Controlled, not all-out.'},
- '2026-12-19':{title:'Long Easy · 7 mi',pace:'10:45–11:45/mi',detail:'Conversational · RPE 3–4. Do not turn the final mile into tempo.'}
-};
-function runPlan(d,s){
- let p=PREHYROX_RUN_PLAN[iso(d)];
- if(p)return p;
- let text=runPrescriptionFallback(d,s);
- return {title:text,pace:'',detail:''};
-}
-function runPrescription(d,s){let p=runPlan(d,s);return p.pace?`${p.title} · ${p.pace}`:p.title}
-function runPrescriptionFallback(d,s){let w=weekOf(d),c=Math.floor((w-1)/4),deload=wave(d)===4;if(s.run==='easy'){let m=Math.max(2.5,Math.min(4.5,3+c*.5-(deload?.5:0)));return m.toFixed(1)+' mi easy · conversational';}if(s.run==='tempo'){return (deload?'1 mi easy + 3 × 1K controlled + easy recovery between reps + easy cooldown':'1 mi easy + 4 × 1K controlled + easy recovery between reps + easy cooldown');}if(s.run==='long'){let m=Math.max(3.5,Math.min(7,4.5+c*.5-(deload?.75:0)));return m.toFixed(1)+' mi easy · relaxed, even effort';}return''}
-function fmt(d){return d.toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'})} function hist(){try{return JSON.parse(localStorage.forgeHistory||'[]')}catch(e){return[]}} function key(d,id){return iso(d)+'__'+id}
-function entryKey(x){return x.key||x.date+'__'+(x.sessionId||'legacy')} function completed(d,id){return hist().some(x=>entryKey(x)===key(d,id))}
-function mode(){return localStorage.wilesMode||localStorage.forgeMode||'Home Gym'} function weekDates(base){return Array.from({length:7},(_,i)=>{let d=new Date(base);d.setDate(d.getDate()+i);return d})}
-function weekLabel(base){let e=new Date(base);e.setDate(e.getDate()+6);return base.toLocaleDateString('en-US',{month:'short',day:'numeric'})+' – '+e.toLocaleDateString('en-US',{month:'short',day:'numeric'})}
-function toast(msg){let x=document.getElementById('toast');x.textContent=msg;x.classList.remove('hidden');setTimeout(()=>x.classList.add('hidden'),1600)}
-function dayState(d){let ss=sessions[d.getDay()],done=ss.filter(s=>s.rest||completed(d,s.id)).length;if(done===ss.length)return['✓ DONE','done'];if(done>0)return[done+'/'+ss.length+' DONE',''];if(iso(d)===iso(today))return['TODAY',''];if(d<today)return['MISSED',''];return['UPCOMING','']}
-function sessionButtons(d,from){let ss=sessions[d.getDay()];return ss.map(s=>`<button class="choice" style="margin-top:8px" onclick="openWorkout('${iso(d)}','${s.id}','${from}')"><span>${s.name}</span><span class="small" style="float:right">${completed(d,s.id)?'✓ DONE':s.run?'RUN':'LIFT'}</span><div class="small">${s.run?runPrescription(d,s):s.sub}</div></button>`).join('')}
-function renderToday(){let ss=sessions[today.getDay()],done=ss.filter(s=>s.rest||completed(today,s.id)).length,held=localStorage.runHold!=='false';
- document.getElementById('phase').textContent=(today<HYROX?'PRE-HYROX':'HYROX')+' · W'+weekOf(today);
- document.getElementById('todayHero').innerHTML=`<div class="card hero"><div class="row"><div><div class="eyebrow">${fmt(today)}</div><h2>${ss.length>1?'Two sessions today':ss[0].name}</h2><div class="sub">${ss.length>1?'Log each session separately.':ss[0].sub}</div></div>${done===ss.length?'<span class="daystatus done">✓ DONE</span>':''}</div>${held&&ss.some(s=>s.run)?'<div class="note"><b>Return-to-run gate active</b><div class="small">Use the run warm-up to confirm normal, stable movement.</div></div>':''}${sessionButtons(today,'today')}</div>`;
- let base=monday(today);document.getElementById('thisWeekTitle').textContent=weekLabel(base);document.getElementById('todayWeek').innerHTML=weekDates(base).map(d=>dayRow(d,'today')).join('')}
-function dayRow(d,from){let ss=sessions[d.getDay()],[st,cl]=dayState(d),runSessions=ss.filter(s=>s.run),title,sub;if(ss.length===1&&ss[0].run){let rp=runPlan(d,ss[0]);title=rp.title;sub=rp.pace?rp.pace:ss[0].sub}else if(ss.length>1){title=ss.map(s=>s.run?runPlan(d,s).title:s.name).join(' + ');let rp=runSessions.length?runPlan(d,runSessions[0]):null;sub=rp&&rp.pace?rp.pace:'2 separate sessions'}else{title=ss[0].name;sub=ss[0].sub}return `<div class="dayrow ${iso(d)===iso(today)?'todaymark':''}" style="display:grid"><div class="daybadge">${d.toLocaleDateString('en-US',{weekday:'short'}).toUpperCase()}<b>${d.getDate()}</b></div><button style="border:0;background:none;text-align:left;padding:0" onclick="openDay('${iso(d)}','${from}')"><div class="daytitle">${title}</div><div class="small">${sub}</div></button><span class="daystatus ${cl}">${st}</span></div>`}
-function openDay(ds,from){let d=parseDate(ds),ss=sessions[d.getDay()];if(ss.length===1)return openWorkout(ds,ss[0].id,from);document.getElementById('subTitle').textContent='Choose session';document.getElementById('subChoices').innerHTML=sessionButtons(d,from);document.getElementById('subModal').classList.remove('hidden')}
-function programBase(){let d=monday(today);d.setDate(d.getDate()+programOffset*7);return d} function shiftProgram(n){programOffset+=n;renderProgram()} function openProgramCurrent(){programOffset=0;showTab('program')}
-function programNote(d){let w=wave(d);return w===1?'Build 1 · Accumulate quality volume. Leave 1–3 reps in reserve and establish loads to progress.':w===2?'Build 2 · Add reps or load where last week was clean while keeping 1–3 RIR.':w===3?'Build 3 · Heavier emphasis. Push performance without grinding and protect run quality.':'Deload · Cut working sets roughly 40–50%, keep 3–4 RIR, and finish the week fresh.'}
-function renderProgram(){let b=programBase(),w=wave(b),info=b<HYROX?['PRE-HYROX BUILD','Muscle · strength · aerobic durability']:['HYROX SPECIFIC','Race-specific strength + running under fatigue'];document.getElementById('programWeek').textContent=weekLabel(b);document.getElementById('programWeekMeta').textContent='Week '+weekOf(b)+' · '+(w===4?'Deload':'Build '+w);document.getElementById('currentWeekBtn').classList.toggle('hidden',programOffset===0);document.getElementById('programOverview').innerHTML=`<div class="card hero"><div class="eyebrow">${info[0]}</div><h2>${info[1]}</h2><div class="programwave">${[1,2,3,4].map(x=>`<div class="wave ${x===w?'active':''}">${x===4?'DELOAD':'BUILD '+x}<br>${x===1?'VOLUME':x===2?'BUILD':x===3?'HEAVY':'RESET'}</div>`).join('')}</div></div>`;document.getElementById('programDays').innerHTML=weekDates(b).map(d=>dayRow(d,'program')).join('');document.getElementById('programNote').textContent=programNote(b)}
-function setMode(m){localStorage.wilesMode=m;localStorage.forgeMode=m;renderWorkoutEnvironment();applyEnvironment();toast(m+' selected')}
-
-const envMaps={
- 'Hotel Gym':{
-  'Barbell Bench Press':'DB Bench Press','Incline DB Press':'Incline DB Press','Seated DB Shoulder Press':'Seated DB Shoulder Press',
-  'Cable / Machine Fly':'Cable Fly','Pull-up / Lat Pulldown':'Lat Pulldown','Chest-Supported Row':'Chest-Supported DB Row',
-  'Back Squat':'DB Front Squat','Romanian Deadlift':'DB Romanian Deadlift','Loaded Walking Lunge':'DB Walking Lunge',
-  'Leg Curl':'Slider Leg Curl','Leg Extension':'Goblet Cyclist Squat','EZ-Bar Curl':'DB Curl','Pec Deck':'Cable Fly'
- },
- 'DB Only':{
-  'Barbell Bench Press':'DB Bench Press','Cable / Machine Fly':'DB Fly','Triceps Pressdown':'DB Skullcrusher',
-  'Pull-up / Lat Pulldown':'DB Pullover','Chest-Supported Row':'Chest-Supported DB Row','Single-Arm Cable Row':'1-Arm DB Row',
-  'Back Squat':'DB Front Squat','Romanian Deadlift':'DB Romanian Deadlift','Loaded Walking Lunge':'DB Walking Lunge',
-  'Leg Curl':'DB Hamstring Curl','Leg Extension':'Goblet Cyclist Squat','Cable Lateral Raise':'DB Lateral Raise',
-  'EZ-Bar Curl':'DB Curl','Cable Curl':'DB Curl','Rope Pressdown':'Close-Grip Push-Up','Seated Cable Row':'1-Arm DB Row',
-  'Pec Deck':'DB Fly','Straight-Arm Pulldown':'DB Pullover'
- },
- 'Body Weight':{
-  'Barbell Bench Press':'Push-Up','Incline DB Press':'Feet-Elevated Push-Up','Seated DB Shoulder Press':'Pike Push-Up',
-  'Cable / Machine Fly':'Slow Push-Up','Lateral Raise':'Prone Y Raise','Triceps Pressdown':'Diamond Push-Up',
-  'Overhead Triceps Extension':'Close-Grip Push-Up','Pull-up / Lat Pulldown':'Prone Lat Pull / Doorway Row',
-  'Chest-Supported Row':'Bodyweight Row / Towel Row','Single-Arm Cable Row':'Towel Row','Incline DB Curl':'Isometric Towel Curl',
-  'Hammer Curl':'Isometric Towel Curl','Back Squat':'Tempo Air Squat','Romanian Deadlift':'Single-Leg Hip Hinge',
-  'Loaded Walking Lunge':'Walking Lunge','Leg Curl':'Slider Leg Curl','Leg Extension':'Reverse Nordic',
-  'Standing Calf Raise':'Single-Leg Calf Raise','Seated Cable Row':'Bodyweight Row / Towel Row','Pec Deck':'Push-Up',
-  'Straight-Arm Pulldown':'Prone Lat Pull','Biceps':'Isometric Towel Curl','Triceps':'Diamond Push-Up'
- }
-};
-let workoutBaseHTML='';
 function renderWorkoutEnvironment(){
  let el=document.getElementById('workoutEnvironment'); if(!el||!activeSession)return;
  let m=mode(),opts=['Home Gym','Hotel Gym','DB Only','Body Weight','Tour Workout'];
@@ -321,6 +212,7 @@ function prepSection(title,items,oldPrep=[]){if(!items||!items.length)return'';r
 function findSession(d,id){return sessions[d.getDay()].find(s=>s.id===id)}
 function openWorkout(ds,id,from){closeSubs();activeDate=parseDate(ds);activeSession=findSession(activeDate,id);returnTab=from||'today';let s=activeSession,k=key(activeDate,id),old=hist().find(x=>entryKey(x)===k),oldSets=old?.sets||[],oldPrep=old?.prep||[];['today','program','progress','history'].forEach(x=>document.getElementById(x).classList.add('hidden'));document.getElementById('workout').classList.remove('hidden');document.getElementById('tabs').classList.add('hidden');document.getElementById('mainHeader').classList.add('hidden');document.getElementById('workoutDate').textContent=fmt(activeDate).toUpperCase();document.getElementById('workoutName').textContent=s.name;stopTimer();
  let out=s.run?prepSection('RUN WARM-UP',runWarmup(),oldPrep):prepSection('WARM-UP',s.warm||[],oldPrep);if(s.run)out+=`<div class="note warn"><b>Readiness check</b><div class="small">Progress walk → jog → drills → strides only if movement feels normal and stable. Stop if instability, radiating symptoms, or meaningful pain returns.</div></div>`;out+=prepSection('ATHLETIC PRIMER',s.primer||[],oldPrep);
+ if(s.superset?.length)out+=`<div class="note"><b>SUPERSET</b><div class="small">${s.superset[0]} ↔ ${s.superset[1]} · alternate exercises, then rest 60–90 sec after each round.</div></div>`;
  if((s.ex||[]).length)out+='<div class="sectionlabel"><b>STRENGTH + HYPERTROPHY</b></div>';
  (s.ex||[]).forEach((e,idx)=>{if(idx===0&&s.preMain)out+=prepSection('LIFT-SPECIFIC WARM-UP',s.preMain,oldPrep);let n=setsFor(e[1],activeDate),type=e[2]||'secondary',sp=specialExercise(e[0],activeDate),range=sp?sp.reps:exReps(type,activeDate),olds=oldSets.filter(x=>x.exercise===e[0]);out+=`<div class="exercise" data-ex="${e[0]}" data-type="${type}"><div class="exhead"><div><h3>${e[0]}</h3><div class="small">${n} × ${range} · ${rir(activeDate)} RIR · Previous: ${previous(e[0],activeDate)}</div>${sp?`<div class="skillwhy">${sp.note}</div>`:''}<div class="suggest">${suggested(e[0],activeDate,type)}</div></div><button class="mini" onclick="openSubs('${e[0].replace(/'/g,"\\'")}')">SWAP</button></div><div class="sethead"><span>SET</span><span>LB</span><span>REPS</span><span>RIR</span><span>DONE</span></div>`;for(let i=0;i<n;i++){let o=olds[i]||{};out+=`<div class="setrow"><b>${i+1}</b><input data-w inputmode="decimal" value="${o.weight||''}"><input data-r inputmode="numeric" value="${o.reps||''}"><input data-rir inputmode="numeric" value="${o.rir??''}"><button class="check ${o.done?'done':''}" onclick="toggleSet(this)">${o.done?'✓':''}</button></div>`}out+='</div>'});
  if(s.run){let r=old?.run||{},rp=runPlan(activeDate,s);out+=`<div class="sectionlabel"><b>RUN</b></div><div class="exercise"><h3>${rp.title}</h3>${rp.pace?`<div class="pill" style="margin-top:8px">TARGET ${rp.pace}</div>`:''}${rp.detail?`<div class="note small">${rp.detail}</div>`:''}<div class="runfields"><input id="runDist" inputmode="decimal" placeholder="Distance (mi)" value="${r.distance||''}"><input id="runTime" placeholder="Time" value="${r.time||''}"><input id="runHr" inputmode="numeric" placeholder="Avg HR" value="${r.hr||''}"><input id="runRpe" inputmode="numeric" placeholder="RPE" value="${r.rpe||''}"><textarea id="runNotes" placeholder="Notes">${r.notes||''}</textarea></div></div>`}
