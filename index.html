@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#f5f4ef">
-<meta name="wiles-version" content="5.1">
+<meta name="wiles-version" content="5.2">
 <title>WILES</title>
 <style>
 :root{--bg:#f5f4ef;--card:#fff;--ink:#111;--muted:#73736e;--line:#deddd7;--soft:#ebeae4;--good:#e7eee7}
@@ -209,6 +209,19 @@ function renderSmartImport(){
 function showTab(id){['today','program','progress','history','workout'].forEach(x=>document.getElementById(x).classList.add('hidden'));document.getElementById(id).classList.remove('hidden');document.getElementById('tabs').classList.remove('hidden');document.getElementById('mainHeader').classList.remove('hidden');document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('active',x.dataset.tab===id));if(id==='today')renderToday();if(id==='program')renderProgram();if(id==='progress')renderProgress();if(id==='history')renderHistory();window.scrollTo(0,0)}
 function goHome(){showTab('today')} function previous(ex,date){let h=hist().filter(x=>x.date<iso(date)).sort((a,b)=>b.date.localeCompare(a.date));for(let w of h){let f=(w.sets||[]).filter(s=>s.exercise===ex&&s.weight&&s.reps);if(f.length){let s=f[f.length-1];return s.weight+' lb × '+s.reps}}return'No previous log'}
 function suggested(ex,date,type='secondary'){let h=hist().filter(x=>x.date<iso(date)).sort((a,b)=>b.date.localeCompare(a.date));for(let w of h){let f=(w.sets||[]).filter(s=>s.exercise===ex&&s.weight&&s.reps);if(f.length){let last=f[f.length-1],range=exReps(type,date),top=parseInt(range.split('–')[1]||range),ready=f.every(s=>s.reps>=top&&(s.rir===null||s.rir>=1)),inc=last.weight>=100?5:2.5;return ready?'Try '+(last.weight+inc)+' lb':'Repeat '+last.weight+' lb'}}return'Choose a load leaving '+rir(date)+' RIR'}
+function specialExercise(ex,d){
+ if(ex==='Loaded Walking Lunge'){
+  let w=wave(d);
+  return {reps:w===4?'8–10 steps / leg':'10–12 steps / leg',note:'Alternate legs · back knee touches floor · full extension. Prefer 20 kg / 44 lb sandbag; DBs totaling ~40–50 lb if needed.'};
+ }
+ if(ex==='Hanging Leg Raise'){
+  return {reps:'8–12',note:'Progress: hanging knee raise → hanging leg raise → toes-to-bar.'};
+ }
+ if(ex==='Hyperextension'){
+  return {reps:'10–15',note:'Controlled reps. Keep 2–3 RIR and avoid chasing fatigue.'};
+ }
+ return null;
+}
 function prepSection(title,items,oldPrep=[]){if(!items||!items.length)return'';return `<div class="sectionlabel"><b>${title}</b></div>${items.map((x,i)=>{let k=title+'-'+i,done=oldPrep.includes(k);return `<div class="prepitem"><button class="prepcheck ${done?'done':''}" data-prep="${k}" onclick="togglePrep(this)">${done?'✓':''}</button><div><b>${x}</b></div></div>`}).join('')}`} function togglePrep(b){b.classList.toggle('done');b.textContent=b.classList.contains('done')?'✓':''}
 function findSession(d,id){return sessions[d.getDay()].find(s=>s.id===id)}
 function openWorkout(ds,id,from){closeSubs();activeDate=parseDate(ds);activeSession=findSession(activeDate,id);returnTab=from||'today';let s=activeSession,k=key(activeDate,id),old=hist().find(x=>entryKey(x)===k),oldSets=old?.sets||[],oldPrep=old?.prep||[];['today','program','progress','history'].forEach(x=>document.getElementById(x).classList.add('hidden'));document.getElementById('workout').classList.remove('hidden');document.getElementById('tabs').classList.add('hidden');document.getElementById('mainHeader').classList.add('hidden');document.getElementById('workoutDate').textContent=fmt(activeDate).toUpperCase();document.getElementById('workoutName').textContent=s.name;stopTimer();
